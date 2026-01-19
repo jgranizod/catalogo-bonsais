@@ -8,7 +8,7 @@ const productosRef = collection(db, "productos");
 /* MAPEO DE IMÁGENES (NO FIREBASE) */
 const imagenes = {
     "Bonsai Ficus": "images/bonsai-ficus.jpg",
- "Bonsai Chiflera": "images/chiflera.jpeg",
+ "Bonsai Chiflera": "images/bonsai-ficus.jpg",
 };
 
 const snapshot = await getDocs(productosRef);

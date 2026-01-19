@@ -12,15 +12,15 @@ async function cargarProductos() {
       const p = doc.data();
 
       // Stock y estado
-      const cantidad = p.stock || 0;             // si por alguna razón no hay stock, pone 0
+      const cantidad = p.stock || 0;
       const estado = cantidad > 0 ? "Disponible" : "AGOTADO";
 
-      // Botón solo si hay stock
+      // Botón
       const boton = cantidad > 0
         ? `<button onclick="agregarCarrito('${doc.id}', '${p.Nombre}', ${p.Precio})">Agregar al carrito</button>`
         : `<button disabled>AGOTADO</button>`;
 
-      // Agregar al contenedor
+      // Mostrar producto
       contenedor.innerHTML += `
         <div class="card">
           <h3>${p.Nombre}</h3>
@@ -36,9 +36,10 @@ async function cargarProductos() {
   }
 }
 
+// Ejecutar al cargar
 cargarProductos();
 
-// Carrito básico usando localStorage
+// Carrito básico con localStorage
 window.agregarCarrito = function(id, nombre, precio) {
   let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
   const existe = carrito.find(p => p.id === id);

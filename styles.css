@@ -1,71 +1,53 @@
+/* Reset básico */
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
+/* Fondo general */
 body {
-  background-color: #f4f6f8;
-  color: #333;
-  padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
 }
 
+/* Título */
 h1 {
-  text-align: center;
-  margin-bottom: 30px;
+    text-align: center;
+    margin-bottom: 30px;
 }
 
-#productos {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
+/* Contenedor del catálogo */
+.catalogo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
 }
 
+/* Tarjeta de producto */
 .producto {
-  background: white;
-  border-radius: 12px;
-  padding: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-  display: flex;
-  flex-direction: column;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-.producto-img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  background-color: #eaeaea;
+/* 🔥 AJUSTE DE IMÁGENES (ESTO ES LA CLAVE) */
+.producto img {
+    width: 100%;
+    height: 220px;      /* TODAS iguales */
+    object-fit: cover; /* Recorta sin deformar */
+    border-radius: 8px;
 }
 
+/* Texto */
 .producto h3 {
-  font-size: 16px;
-  margin-bottom: 6px;
+    margin: 10px 0 5px;
 }
 
 .producto p {
-  font-size: 14px;
-  margin-bottom: 6px;
-}
-
-.stock {
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.producto button {
-  margin-top: auto;
-  padding: 8px;
-  border: none;
-  border-radius: 8px;
-  background-color: #2e7d32;
-  color: white;
-  cursor: pointer;
-}
-
-.producto button:disabled {
-  background-color: #aaa;
-  cursor: not-allowed;
+    font-weight: bold;
+    color: green;
 }

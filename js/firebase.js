@@ -5,12 +5,12 @@ import { getFirestore } from
 "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_PROYECTO.firebaseapp.com",
-  projectId: "TU_PROYECTO",
-  storageBucket: "TU_PROYECTO.appspot.com",
-  messagingSenderId: "XXXX",
-  appId: "XXXX"
+  apiKey: "AIzaSyD92apK91B1M3Jin0p9Jw_68G8uxlsu_Cw",
+  authDomain: "catalogo-bonsais.firebaseapp.com",
+  projectId: "catalogo-bonsais",
+  storageBucket: "catalogo-bonsais.firebasestorage.app",
+  messagingSenderId: "733197067098",
+  appId: "1:733197067098:web:03babf7f4542468cf68963"
 };
 
 const app = initializeApp(firebaseConfig);

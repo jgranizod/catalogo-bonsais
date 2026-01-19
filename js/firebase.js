@@ -2,12 +2,12 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_AUTH_DOMAIN",
-  projectId: "TU_PROJECT_ID",
-  storageBucket: "TU_STORAGE_BUCKET",
-  messagingSenderId: "TU_MESSAGING_SENDER_ID",
-  appId: "TU_APP_ID"
+  apiKey: "AIzaSyD92apK91B1M3Jin0p9Jw_68G8uxlsu_Cw",
+  authDomain: "catalogo-bonsais.firebaseapp.com",
+  projectId: "catalogo-bonsais",
+  storageBucket: "catalogo-bonsais.firebasestorage.app",
+  messagingSenderId: "733197067098",
+  appId: "1:733197067098:web:03babf7f4542468cf68963"
 };
 
 // Inicializar Firebase

@@ -3,7 +3,6 @@ import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/f
 
 const contenedor = document.getElementById("productos");
 
-// Función para cargar productos
 async function cargarProductos() {
   try {
     const productosRef = collection(db, "productos");
@@ -12,19 +11,21 @@ async function cargarProductos() {
     snapshot.forEach(doc => {
       const p = doc.data();
 
-      // Verificar stock
-      let estado = p.stock > 0 ? "Disponible" : "AGOTADO";
+      // Stock y estado
+      const cantidad = p.stock || 0;             // si por alguna razón no hay stock, pone 0
+      const estado = cantidad > 0 ? "Disponible" : "AGOTADO";
 
-      // Deshabilitar botón si stock = 0
-      let boton = p.stock > 0 
+      // Botón solo si hay stock
+      const boton = cantidad > 0
         ? `<button onclick="agregarCarrito('${doc.id}', '${p.Nombre}', ${p.Precio})">Agregar al carrito</button>`
         : `<button disabled>AGOTADO</button>`;
 
+      // Agregar al contenedor
       contenedor.innerHTML += `
         <div class="card">
           <h3>${p.Nombre}</h3>
           <p>Precio: $${p.Precio}</p>
-          <p>Stock: ${p.stock}</p>
+          <p>Stock: ${cantidad}</p>
           ${boton}
         </div>
       `;
@@ -35,7 +36,6 @@ async function cargarProductos() {
   }
 }
 
-// Ejecutar al cargar
 cargarProductos();
 
 // Carrito básico usando localStorage

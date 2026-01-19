@@ -1,53 +1,70 @@
-/* Reset básico */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-/* Fondo general */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background: #f6f6f6;
+    margin: 0;
     padding: 20px;
 }
 
-/* Título */
 h1 {
     text-align: center;
-    margin-bottom: 30px;
+    color: #2e7d32;
 }
 
-/* Contenedor del catálogo */
-.catalogo {
+#productos {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 20px;
+    max-width: 1100px;
+    margin: auto;
 }
 
-/* Tarjeta de producto */
 .producto {
     background: white;
-    border-radius: 10px;
-    padding: 10px;
+    border-radius: 8px;
+    padding: 12px;
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-/* 🔥 AJUSTE DE IMÁGENES (ESTO ES LA CLAVE) */
 .producto img {
     width: 100%;
-    height: 220px;      /* TODAS iguales */
-    object-fit: cover; /* Recorta sin deformar */
-    border-radius: 8px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 6px;
 }
 
-/* Texto */
 .producto h3 {
     margin: 10px 0 5px;
 }
 
-.producto p {
+.precio {
     font-weight: bold;
-    color: green;
+    color: #2e7d32;
+}
+
+.stock {
+    font-size: 14px;
+    color: #555;
+}
+
+button {
+    margin-top: 10px;
+    padding: 8px;
+    width: 100%;
+    border: none;
+    background: #2e7d32;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #256428;
+}
+
+.soldout {
+    display: block;
+    margin-top: 10px;
+    color: red;
+    font-weight: bold;
 }

@@ -11,11 +11,11 @@ async function cargarProductos() {
     snapshot.forEach(doc => {
       const p = doc.data();
 
-      // Mostrar solo nombre y precio
+      // Mostrar nombre y precio respetando mayúsculas
       contenedor.innerHTML += `
         <div class="card">
-          <h3>${p.nombre}</h3>
-          <p>Precio: $${p.precio}</p>
+          <h3>${p.Nombre}</h3>
+          <p>Precio: $${p.Precio}</p>
         </div>
       `;
     });

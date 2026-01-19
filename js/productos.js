@@ -3,17 +3,23 @@ import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/f
 
 const contenedor = document.getElementById("productos");
 
+/* 🛒 carrito (el tuyo) */
+window.agregarCarrito = function(nombre, precio) {
+  alert(`Agregado: ${nombre} - $${precio}`);
+};
+
 async function cargarProductos() {
-  const querySnapshot = await getDocs(collection(db, "productos"));
+  const snapshot = await getDocs(collection(db, "productos"));
 
   contenedor.innerHTML = "";
 
-  querySnapshot.forEach((doc) => {
+  snapshot.forEach((doc) => {
     const p = doc.data();
 
     const card = document.createElement("div");
     card.className = "card";
 
+    /* 👇 AQUÍ SE MUESTRA LA IMAGEN */
     card.innerHTML = `
       <img src="${p.imagen}" alt="${p.Nombre}">
       <h3>${p.Nombre}</h3>
@@ -22,7 +28,9 @@ async function cargarProductos() {
 
       ${
         p.stock > 0
-          ? `<button>Agregar al carrito</button>`
+          ? `<button onclick="agregarCarrito('${p.Nombre}', ${p.Precio})">
+               Agregar al carrito
+             </button>`
           : `<button disabled>Agotado</button>`
       }
     `;

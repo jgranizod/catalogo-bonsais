@@ -4,52 +4,31 @@ import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/f
 const contenedor = document.getElementById("productos");
 
 async function cargarProductos() {
-  try {
-    const productosRef = collection(db, "productos");
-    const snapshot = await getDocs(productosRef);
+  const querySnapshot = await getDocs(collection(db, "productos"));
 
-    snapshot.forEach(doc => {
-      const p = doc.data();
+  contenedor.innerHTML = "";
 
-      // Stock y estado
-      const cantidad = p.stock || 0;
-      const estado = cantidad > 0 ? "Disponible" : "AGOTADO";
+  querySnapshot.forEach((doc) => {
+    const p = doc.data();
 
-      // Botón
-      const boton = cantidad > 0
-        ? `<button onclick="agregarCarrito('${doc.id}', '${p.Nombre}', ${p.Precio})">Agregar al carrito</button>`
-        : `<button disabled>AGOTADO</button>`;
+    const card = document.createElement("div");
+    card.className = "card";
 
-      // Mostrar producto
-      contenedor.innerHTML += `
-        <div class="card">
-          <h3>${p.Nombre}</h3>
-          <p>Precio: $${p.Precio}</p>
-          <p>Stock: ${cantidad}</p>
-          ${boton}
-        </div>
-      `;
-    });
+    card.innerHTML = `
+      <img src="${p.imagen}" alt="${p.Nombre}">
+      <h3>${p.Nombre}</h3>
+      <p>Precio: $${p.Precio}</p>
+      <p>Stock: ${p.stock}</p>
 
-  } catch (error) {
-    console.error("Error cargando productos:", error);
-  }
+      ${
+        p.stock > 0
+          ? `<button>Agregar al carrito</button>`
+          : `<button disabled>Agotado</button>`
+      }
+    `;
+
+    contenedor.appendChild(card);
+  });
 }
 
-// Ejecutar al cargar
 cargarProductos();
-
-// Carrito básico con localStorage
-window.agregarCarrito = function(id, nombre, precio) {
-  let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-  const existe = carrito.find(p => p.id === id);
-
-  if (existe) {
-    existe.cantidad++;
-  } else {
-    carrito.push({ id, nombre, precio, cantidad: 1 });
-  }
-
-  localStorage.setItem("carrito", JSON.stringify(carrito));
-  alert(`${nombre} agregado al carrito`);
-}

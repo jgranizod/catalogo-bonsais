@@ -3,13 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <title>Catálogo de Productos</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    h1 { color: green; }
+    .card { border: 1px solid #ccc; padding: 10px; margin: 10px; display: inline-block; width: 150px; }
+  </style>
 </head>
 <body>
 
 <h1>🌱 Catálogo de Productos</h1>
+
+<!-- Aquí se mostrarán los productos -->
 <div id="productos"></div>
 
+<!-- Firebase -->
 <script type="module" src="js/firebase.js"></script>
+<!-- Código para leer productos -->
 <script type="module" src="js/productos.js"></script>
 
 </body>

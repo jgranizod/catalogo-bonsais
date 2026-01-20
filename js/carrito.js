@@ -1,7 +1,7 @@
 // 🛒 SISTEMA DE CARRITO CON LOCALSTORAGE
 
 // Configuración
-const WHATSAPP_NUMERO = '593986500805'; // ⚠️ CAMBIA ESTE NÚMERO
+const WHATSAPP_NUMERO = '593985700805'; // ⚠️ CAMBIA ESTE NÚMERO
 
 // Obtener carrito del localStorage
 function obtenerCarrito() {

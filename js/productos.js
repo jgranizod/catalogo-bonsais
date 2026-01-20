@@ -1,37 +1,42 @@
 import { db } from "./firebase.js";
-import {
-  collection,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const contenedor = document.getElementById("productos");
 
-const snapshot = await getDocs(collection(db, "productos"));
+/* 🛒 carrito (el tuyo) */
+window.agregarCarrito = function(nombre, precio) {
+  alert(`Agregado: ${nombre} - $${precio}`);
+};
 
-snapshot.forEach(doc => {
-  const data = doc.data();
+async function cargarProductos() {
+  const snapshot = await getDocs(collection(db, "productos"));
 
-  const card = document.createElement("div");
-  card.className = "producto";
+  contenedor.innerHTML = "";
 
-  const img = document.createElement("img");
-  img.className = "producto-img";
+  snapshot.forEach((doc) => {
+    const p = doc.data();
 
-  img.src = `/catalogo-bonsais/images/${data.imagen}`;
+    const card = document.createElement("div");
+    card.className = "card";
 
-  const nombre = document.createElement("h3");
-  nombre.textContent = data.Nombre;
+    /* 👇 AQUÍ SE MUESTRA LA IMAGEN */
+    card.innerHTML = `
+      <img src="${p.imagen}" alt="${p.Nombre}">
+      <h3>${p.Nombre}</h3>
+      <p>Precio: $${p.Precio}</p>
+      <p>Stock: ${p.stock}</p>
 
-  const precio = document.createElement("p");
-  precio.textContent = `$${data.Precio}`;
+      ${
+        p.stock > 0
+          ? `<button onclick="agregarCarrito('${p.Nombre}', ${p.Precio})">
+               Agregar al carrito
+             </button>`
+          : `<button disabled>Agotado</button>`
+      }
+    `;
 
-  const stock = document.createElement("p");
-  stock.textContent = `Stock: ${data.stock}`;
+    contenedor.appendChild(card);
+  });
+}
 
-  card.appendChild(img);
-  card.appendChild(nombre);
-  card.appendChild(precio);
-  card.appendChild(stock);
-
-  contenedor.appendChild(card);
-});
+cargarProductos();

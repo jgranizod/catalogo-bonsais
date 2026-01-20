@@ -6,9 +6,9 @@ import {
 
 const contenedor = document.getElementById("productos");
 
-const querySnapshot = await getDocs(collection(db, "productos"));
+const snapshot = await getDocs(collection(db, "productos"));
 
-querySnapshot.forEach((doc) => {
+snapshot.forEach(doc => {
   const data = doc.data();
 
   const card = document.createElement("div");
@@ -17,11 +17,7 @@ querySnapshot.forEach((doc) => {
   const img = document.createElement("img");
   img.className = "producto-img";
 
-  if (data.imagen) {
-    img.src = `../images/${data.imagen.trim()}`;
-  } else {
-    img.src = "../images/default.jpeg";
-  }
+  img.src = `/catalogo-bonsais/images/${data.imagen}`;
 
   const nombre = document.createElement("h3");
   nombre.textContent = data.Nombre;
@@ -30,8 +26,7 @@ querySnapshot.forEach((doc) => {
   precio.textContent = `$${data.Precio}`;
 
   const stock = document.createElement("p");
-  stock.className = "stock";
-  stock.textContent = data.stock > 0 ? `Stock: ${data.stock}` : "AGOTADO";
+  stock.textContent = `Stock: ${data.stock}`;
 
   card.appendChild(img);
   card.appendChild(nombre);

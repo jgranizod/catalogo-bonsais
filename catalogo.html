@@ -17,8 +17,8 @@
         <a href="catalogo.html" class="activo">Catálogo</a>
         <a href="contacto.html">Contacto</a>
       </nav>
-      <button class="carrito-btn" onclick="alert('Carrito próximamente')">
-        🛒 <span id="carrito-count">0</span>
+      <button class="carrito-btn" onclick="toggleCarrito()">
+        🛒 <span id="carrito-count" class="carrito-count">0</span>
       </button>
     </div>
   </header>
@@ -49,6 +49,30 @@
     <!-- PRODUCTOS -->
     <div id="productos" class="grid">
       <p class="loading">Cargando productos...</p>
+    </div>
+  </div>
+
+  <!-- CARRITO SIDEBAR -->
+  <div id="carrito-overlay"></div>
+  <div id="carrito-sidebar">
+    <div class="carrito-header">
+      <h2>🛒 Tu Carrito</h2>
+      <button class="carrito-close" onclick="toggleCarrito()">&times;</button>
+    </div>
+    
+    <div id="carrito-items"></div>
+    
+    <div id="carrito-footer" style="display: none;">
+      <div class="carrito-total-container">
+        <span class="carrito-total-label">Total:</span>
+        <span id="carrito-total">$0.00</span>
+      </div>
+      <div class="carrito-acciones">
+        <button onclick="vaciarCarrito()" class="btn-vaciar">Vaciar Carrito</button>
+        <button onclick="checkoutWhatsApp()" class="btn-checkout">
+          Realizar Pedido por WhatsApp
+        </button>
+      </div>
     </div>
   </div>
 
@@ -113,7 +137,7 @@
             <p class="stock">Stock disponible: ${p.stock}</p>
             ${
               p.stock > 0
-                ? `<button onclick="agregarCarrito('${p.Nombre}', ${p.Precio})">
+                ? `<button onclick="agregarAlCarrito('${p.id}', '${p.Nombre.replace(/'/g, "\\'")}', ${p.Precio}, '${p.imagen}', ${p.stock})">
                      Añadir al carrito
                    </button>`
                 : `<button disabled>Agotado</button>`
@@ -140,13 +164,11 @@
       event.target.classList.add('activo');
     };
 
-    // Agregar al carrito
-    window.agregarCarrito = function(nombre, precio) {
-      alert(`✅ Agregado al carrito:\n\n${nombre}\nPrecio: $${precio}`);
-    };
-
     // Iniciar
     cargarProductos();
   </script>
+
+  <!-- CARRITO SCRIPT -->
+  <script src="js/carrito.js"></script>
 </body>
 </html>

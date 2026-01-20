@@ -2,14 +2,27 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Catálogo de Bonsáis</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Catálogo de Bonsáis - Servigreen</title>
   <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
+  <header>
+    <h1>🌿 Catálogo de Productos</h1>
+  </header>
 
-  <h1>Catálogo de Productos</h1>
+  <main>
+    <div id="productos" class="grid">
+      <p class="loading">Cargando productos...</p>
+    </div>
+  </main>
 
-  <div id="productos" class="grid"></div>
+  <footer>
+    <p>&copy; 2024 Servigreen - Plantas de calidad</p>
+  </footer>
 
   <script type="module" src="js/firebase.js"></script>
   <script type="module" src="js/productos.js"></script>

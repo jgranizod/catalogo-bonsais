@@ -3,28 +3,116 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <title>Catálogo de Bonsáis - Servigreen</title>
+  <title>Servigreen - Naturaleza en Casa</title>
   <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
-  <header>
-    <h1>🌿 Catálogo de Productos</h1>
+  
+  <!-- NAVEGACIÓN -->
+  <header class="header">
+    <div class="container">
+      <div class="logo">🌿 Servigreen</div>
+      <nav class="nav">
+        <a href="#inicio" onclick="mostrarSeccion('inicio')">Inicio</a>
+        <a href="#catalogo" onclick="mostrarSeccion('catalogo')">Catálogo</a>
+        <a href="#contacto" onclick="mostrarSeccion('contacto')">Contacto</a>
+      </nav>
+      <button class="carrito-btn" onclick="alert('Carrito próximamente')">
+        🛒 <span id="carrito-count">0</span>
+      </button>
+    </div>
   </header>
 
-  <main>
-    <div id="productos" class="grid">
-      <p class="loading">Cargando productos...</p>
+  <!-- SECCIÓN INICIO -->
+  <section id="inicio" class="seccion activa">
+    <!-- Hero Banner -->
+    <div class="hero">
+      <h1>Naturaleza en casa</h1>
+      <p>Servigreen mejora tu salud creando sombras naturales y refugios de bienestar emocional que transforman tu calidad de vida.</p>
     </div>
-  </main>
 
+    <!-- Destacados -->
+    <div class="container">
+      <h2 class="titulo-seccion">Productos Destacados</h2>
+      <div id="destacados" class="grid"></div>
+      <div class="centrar">
+        <button class="btn-ver-mas" onclick="mostrarSeccion('catalogo')">
+          Ver Catálogo Completo
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN CATÁLOGO -->
+  <section id="catalogo" class="seccion">
+    <div class="container">
+      <h2 class="titulo-seccion">Catálogo de Productos</h2>
+      
+      <!-- Filtros -->
+      <div class="filtros">
+        <button class="filtro-btn activo" onclick="filtrar('todos')">
+          📦 Todos
+        </button>
+        <button class="filtro-btn" onclick="filtrar('bonsai')">
+          🌳 Bonsáis
+        </button>
+        <button class="filtro-btn" onclick="filtrar('plantas')">
+          🌿 Plantas
+        </button>
+        <button class="filtro-btn" onclick="filtrar('suculentas')">
+          🌵 Suculentas
+        </button>
+        <button class="filtro-btn" onclick="filtrar('cactus')">
+          🌵 Cactus
+        </button>
+      </div>
+
+      <!-- Productos -->
+      <div id="productos" class="grid">
+        <p class="loading">Cargando productos...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN CONTACTO -->
+  <section id="contacto" class="seccion">
+    <div class="container">
+      <h2 class="titulo-seccion">Contacto</h2>
+      <div class="contacto-contenido">
+        <div class="contacto-info">
+          <h3>📍 Ubicación</h3>
+          <p>Milagro, Guayas, Ecuador</p>
+          
+          <h3>📱 Teléfono</h3>
+          <p>+593 99 999 9999</p>
+          
+          <h3>📧 Email</h3>
+          <p>contacto@servigreen.com</p>
+          
+          <h3>⏰ Horarios</h3>
+          <p>Lunes a Sábado: 9:00 AM - 6:00 PM</p>
+        </div>
+
+        <div class="contacto-formulario">
+          <h3>Envíanos un mensaje</h3>
+          <form onsubmit="enviarMensaje(event)">
+            <input type="text" placeholder="Nombre" required>
+            <input type="email" placeholder="Email" required>
+            <textarea placeholder="Mensaje" rows="5" required></textarea>
+            <button type="submit" class="btn-enviar">Enviar Mensaje</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
   <footer>
-    <p>&copy; 2024 Servigreen - Plantas de calidad</p>
+    <p>&copy; 2024 Servigreen - Naturaleza en tu hogar</p>
   </footer>
 
   <script type="module" src="js/firebase.js"></script>
   <script type="module" src="js/productos.js"></script>
+  <script src="js/navegacion.js"></script>
 </body>
 </html>

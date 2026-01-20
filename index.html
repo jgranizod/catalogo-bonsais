@@ -6,6 +6,32 @@
   <title>Servigreen - Inicio</title>
   <link rel="stylesheet" href="css/estilos.css">
 </head>
+  <!-- CARRITO SIDEBAR -->
+  <div id="carrito-overlay"></div>
+  <div id="carrito-sidebar">
+    <div class="carrito-header">
+      <h2>🛒 Tu Carrito</h2>
+      <button class="carrito-close" onclick="toggleCarrito()">&times;</button>
+    </div>
+    
+    <div id="carrito-items"></div>
+    
+    <div id="carrito-footer" style="display: none;">
+      <div class="carrito-total-container">
+        <span class="carrito-total-label">Total:</span>
+        <span id="carrito-total">$0.00</span>
+      </div>
+      <div class="carrito-acciones">
+        <button onclick="vaciarCarrito()" class="btn-vaciar">Vaciar Carrito</button>
+        <button onclick="checkoutWhatsApp()" class="btn-checkout">
+          Realizar Pedido por WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/carrito.js"></script>
+</body>
 <body>
   
   <!-- NAVEGACIÓN -->
@@ -22,6 +48,9 @@
       </button>
     </div>
   </header>
+  <button class="carrito-btn" onclick="toggleCarrito()">
+  🛒 <span id="carrito-count" class="carrito-count">0</span>
+</button>
 
   <!-- HERO BANNER -->
   <section class="hero">

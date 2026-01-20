@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Servigreen - Naturaleza en Casa</title>
+  <title>Servigreen - Inicio</title>
   <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
@@ -13,96 +13,49 @@
     <div class="container">
       <div class="logo">🌿 Servigreen</div>
       <nav class="nav">
-        <a href="#inicio" onclick="mostrarSeccion('inicio')">Inicio</a>
-        <a href="#catalogo" onclick="mostrarSeccion('catalogo')">Catálogo</a>
-        <a href="#contacto" onclick="mostrarSeccion('contacto')">Contacto</a>
+        <a href="index.html" class="activo">Inicio</a>
+        <a href="catalogo.html">Catálogo</a>
+        <a href="contacto.html">Contacto</a>
       </nav>
       <button class="carrito-btn" onclick="alert('Carrito próximamente')">
-        🛒 <span id="carrito-count">0</span>
+        🛒 <span>0</span>
       </button>
     </div>
   </header>
 
-  <!-- SECCIÓN INICIO -->
-  <section id="inicio" class="seccion activa">
-    <!-- Hero Banner -->
-    <div class="hero">
-      <h1>Naturaleza en casa</h1>
-      <p>Servigreen mejora tu salud creando sombras naturales y refugios de bienestar emocional que transforman tu calidad de vida.</p>
-    </div>
+  <!-- HERO BANNER -->
+  <section class="hero">
+    <h1>Naturaleza en casa</h1>
+    <p>Servigreen mejora tu salud creando sombras naturales y refugios de bienestar emocional que transforman tu calidad de vida.</p>
+  </section>
 
-    <!-- Destacados -->
-    <div class="container">
-      <h2 class="titulo-seccion">Productos Destacados</h2>
-      <div id="destacados" class="grid"></div>
-      <div class="centrar">
-        <button class="btn-ver-mas" onclick="mostrarSeccion('catalogo')">
-          Ver Catálogo Completo
-        </button>
-      </div>
+  <!-- PRODUCTOS DESTACADOS -->
+  <section class="container">
+    <h2 class="titulo-seccion">Productos Destacados</h2>
+    <div id="destacados" class="grid">
+      <p class="loading">Cargando productos...</p>
+    </div>
+    <div class="centrar">
+      <a href="catalogo.html" class="btn-ver-mas">Ver Catálogo Completo</a>
     </div>
   </section>
 
-  <!-- SECCIÓN CATÁLOGO -->
-  <section id="catalogo" class="seccion">
-    <div class="container">
-      <h2 class="titulo-seccion">Catálogo de Productos</h2>
-      
-      <!-- Filtros -->
-      <div class="filtros">
-        <button class="filtro-btn activo" onclick="filtrar('todos')">
-          📦 Todos
-        </button>
-        <button class="filtro-btn" onclick="filtrar('bonsai')">
-          🌳 Bonsáis
-        </button>
-        <button class="filtro-btn" onclick="filtrar('plantas')">
-          🌿 Plantas
-        </button>
-        <button class="filtro-btn" onclick="filtrar('suculentas')">
-          🌵 Suculentas
-        </button>
-        <button class="filtro-btn" onclick="filtrar('cactus')">
-          🌵 Cactus
-        </button>
-      </div>
-
-      <!-- Productos -->
-      <div id="productos" class="grid">
-        <p class="loading">Cargando productos...</p>
-      </div>
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="feature-card">
+      <div class="feature-icon">🌱</div>
+      <h3>Calidad Garantizada</h3>
+      <p>Plantas seleccionadas y cuidadas con amor</p>
     </div>
-  </section>
-
-  <!-- SECCIÓN CONTACTO -->
-  <section id="contacto" class="seccion">
-    <div class="container">
-      <h2 class="titulo-seccion">Contacto</h2>
-      <div class="contacto-contenido">
-        <div class="contacto-info">
-          <h3>📍 Ubicación</h3>
-          <p>Milagro, Guayas, Ecuador</p>
-          
-          <h3>📱 Teléfono</h3>
-          <p>+593 99 999 9999</p>
-          
-          <h3>📧 Email</h3>
-          <p>contacto@servigreen.com</p>
-          
-          <h3>⏰ Horarios</h3>
-          <p>Lunes a Sábado: 9:00 AM - 6:00 PM</p>
-        </div>
-
-        <div class="contacto-formulario">
-          <h3>Envíanos un mensaje</h3>
-          <form onsubmit="enviarMensaje(event)">
-            <input type="text" placeholder="Nombre" required>
-            <input type="email" placeholder="Email" required>
-            <textarea placeholder="Mensaje" rows="5" required></textarea>
-            <button type="submit" class="btn-enviar">Enviar Mensaje</button>
-          </form>
-        </div>
-      </div>
+    <div class="feature-card">
+      <div class="feature-icon">🚚</div>
+      <h3>Envío Seguro</h3>
+      <p>Entrega a domicilio en perfectas condiciones</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💚</div>
+      <h3>Asesoría Gratuita</h3>
+      <p>Te ayudamos a cuidar tus plantas</p>
     </div>
   </section>
 
@@ -111,8 +64,51 @@
     <p>&copy; 2024 Servigreen - Naturaleza en tu hogar</p>
   </footer>
 
-  <script type="module" src="js/firebase.js"></script>
-  <script type="module" src="js/productos.js"></script>
-  <script src="js/navegacion.js"></script>
+  <script type="module">
+    import { db } from "./js/firebase.js";
+    import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    async function cargarDestacados() {
+      try {
+        const snapshot = await getDocs(collection(db, "productos"));
+        const contenedor = document.getElementById('destacados');
+        contenedor.innerHTML = '';
+        
+        let count = 0;
+        snapshot.forEach((doc) => {
+          if (count < 4) { // Solo primeros 4
+            const p = doc.data();
+            const card = document.createElement('div');
+            card.className = 'producto';
+            
+            card.innerHTML = `
+              <img src="${p.imagen}" alt="${p.Nombre}" class="producto-img">
+              <div class="producto-info">
+                <span class="categoria-tag">${p.categoria || 'General'}</span>
+                <h3>${p.Nombre}</h3>
+                <div class="precio-container">
+                  <span class="precio">$${parseFloat(p.Precio).toFixed(2)}</span>
+                </div>
+                <p class="stock">Stock: ${p.stock}</p>
+                <button onclick="alert('Producto: ${p.Nombre}')">Ver Detalles</button>
+              </div>
+            `;
+            
+            contenedor.appendChild(card);
+            count++;
+          }
+        });
+
+        if (count === 0) {
+          contenedor.innerHTML = '<p class="loading">No hay productos disponibles</p>';
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        document.getElementById('destacados').innerHTML = '<p class="loading">Error al cargar productos</p>';
+      }
+    }
+
+    cargarDestacados();
+  </script>
 </body>
 </html>

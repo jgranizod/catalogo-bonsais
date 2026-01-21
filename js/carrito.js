@@ -9,14 +9,28 @@ let colaOperaciones = Promise.resolve();
 // Cache del carrito en memoria
 let carritoCache = null;
 
-// Bloqueo por producto (evita spam rapido)
+// Bloqueo por producto
 const bloqueados = new Set();
+
+// Cooldown por producto
+const COOLDOWN_MS = 3000;
+const ultimoClick = new Map();
 
 function enCola(tarea) {
   colaOperaciones = colaOperaciones.then(tarea, tarea).catch((e) => {
     console.error("Error en carrito:", e);
   });
   return colaOperaciones;
+}
+
+function enCooldown(id) {
+  const ahora = Date.now();
+  const ultimo = ultimoClick.get(id) || 0;
+  if (ahora - ultimo < COOLDOWN_MS) {
+    return true;
+  }
+  ultimoClick.set(id, ahora);
+  return false;
 }
 
 function obtenerCarrito() {
@@ -60,6 +74,10 @@ async function ajustarStock(id, delta) {
 
 window.agregarAlCarrito = function(id, nombre, precio, imagen, stock) {
   return enCola(async () => {
+    if (enCooldown(id)) {
+      mostrarNotificacion("Espera 3 segundos antes de agregar de nuevo");
+      return;
+    }
     if (bloqueados.has(id)) return;
     bloqueados.add(id);
 
@@ -97,6 +115,10 @@ window.agregarAlCarrito = function(id, nombre, precio, imagen, stock) {
 
 window.aumentarCantidad = function(id) {
   return enCola(async () => {
+    if (enCooldown(id)) {
+      mostrarNotificacion("Espera 3 segundos antes de agregar de nuevo");
+      return;
+    }
     if (bloqueados.has(id)) return;
     bloqueados.add(id);
 

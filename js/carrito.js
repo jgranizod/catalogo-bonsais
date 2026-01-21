@@ -63,7 +63,7 @@ async function ajustarStock(id, delta) {
     return true;
   } catch (error) {
     if (error.message === "stock-insuficiente") {
-      alert("No hay mas stock disponible");
+      alert("No hay más stock disponible");
       return false;
     }
     console.error("Error al actualizar stock:", error);
@@ -208,7 +208,7 @@ async function limpiarCarrito(restaurarStock) {
 
 window.vaciarCarrito = function() {
   return enCola(async () => {
-    if (!confirm("Estas seguro de vaciar el carrito?")) return;
+    if (!confirm("¿Estás seguro de vaciar el carrito?")) return;
 
     const ok = await limpiarCarrito(true);
     if (ok) mostrarNotificacion("Carrito vaciado");
@@ -240,8 +240,8 @@ function renderizarCarrito() {
     contenedor.innerHTML = `
       <div class="carrito-vacio">
         <div class="carrito-vacio-icon">Carrito</div>
-        <p>Tu carrito esta vacio</p>
-        <a href="catalogo.html" class="btn-seguir-comprando">Ver Catalogo</a>
+        <p>Tu carrito está vacío</p>
+        <a href="catalogo.html" class="btn-seguir-comprando">Ver Catálogo</a>
       </div>
     `;
     footer.style.display = "none";
@@ -271,8 +271,16 @@ function renderizarCarrito() {
     contenedor.appendChild(itemDiv);
   });
 
-  const total = calcularTotal();
-  document.getElementById("carrito-total").textContent = `$${total.toFixed(2)}`;
+  const subtotal = calcularTotal();
+  const envio = subtotal > 0 ? 2.5 : 0;
+  const impuestos = subtotal * 0.05;
+  const total = subtotal + envio + impuestos;
+
+  document.getElementById("carrito-subtotal").textContent = "$" + subtotal.toFixed(2);
+  document.getElementById("carrito-envio").textContent = "$" + envio.toFixed(2);
+  document.getElementById("carrito-impuestos").textContent = "$" + impuestos.toFixed(2);
+  document.getElementById("carrito-total").textContent = "$" + total.toFixed(2);
+
   footer.style.display = "block";
 }
 
@@ -298,7 +306,7 @@ window.checkoutWhatsApp = function() {
   return enCola(async () => {
     const carrito = obtenerCarrito();
     if (carrito.length === 0) {
-      alert("El carrito esta vacio");
+      alert("El carrito está vacío");
       return;
     }
 
@@ -313,17 +321,21 @@ window.checkoutWhatsApp = function() {
       mensaje += "   Subtotal: $" + (item.precio * item.cantidad).toFixed(2) + "\\n\\n";
     });
 
-    const total = calcularTotal();
+    const subtotal = calcularTotal();
+    const envio = subtotal > 0 ? 2.5 : 0;
+    const impuestos = subtotal * 0.05;
+    const total = subtotal + envio + impuestos;
+
     mensaje += "------------------------------\\n";
     mensaje += "*TOTAL: $" + total.toFixed(2) + "*\\n\\n";
-    mensaje += "Por favor, confirma tu direccion de entrega.";
+    mensaje += "Por favor, confirma tu dirección de entrega.";
 
     const mensajeCodificado = encodeURIComponent(mensaje);
     const urlWhatsApp = "https://wa.me/" + WHATSAPP_NUMERO + "?text=" + mensajeCodificado;
     window.open(urlWhatsApp, "_blank");
 
     setTimeout(async () => {
-      if (confirm("Deseas vaciar el carrito?")) {
+      if (confirm("¿Deseas vaciar el carrito?")) {
         await limpiarCarrito(false);
         toggleCarrito();
       }

@@ -718,4 +718,137 @@ footer {
   font-weight: 600;
   transition: all 0.3s;
   display: flex;
-  align-items:
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-checkout:hover {
+  background: #1ebe5b;
+  transform: translateY(-1px);
+}
+
+.carrito-count {
+  background: #fff;
+  color: #2d5016;
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 0.8rem;
+  margin-left: 6px;
+  display: inline-block;
+  min-width: 24px;
+  text-align: center;
+}
+
+.notificacion {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #2d5016;
+  color: white;
+  padding: 14px 20px;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  z-index: 2000;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s;
+  font-weight: 600;
+}
+
+.notificacion.mostrar {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* HERO ACCIONES */
+.hero-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-actions {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-primario,
+.btn-secundario {
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: all 0.3s;
+}
+
+.btn-primario {
+  background: #ffffff;
+  color: #2d5016;
+}
+
+.btn-primario:hover {
+  background: #e8f5e9;
+}
+
+.btn-secundario {
+  border: 2px solid #ffffff;
+  color: #ffffff;
+}
+
+.btn-secundario:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* SECCIÓN VALOR */
+.valor {
+  background: #f3f7f2;
+  padding: 60px 0;
+}
+
+.valor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 40px;
+  align-items: center;
+}
+
+.valor h2 {
+  color: #2d5016;
+  margin-bottom: 16px;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.valor p {
+  color: #55624c;
+  font-size: 1.05rem;
+}
+
+.valor-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.valor-lista li {
+  background: white;
+  border-radius: 10px;
+  padding: 14px 18px;
+  border-left: 4px solid #2d5016;
+  color: #2f3b28;
+  font-weight: 500;
+}
+
+/* RESPONSIVE CARRITO */
+@media (max-width: 768px) {
+  #carrito-sidebar {
+    width: 100%;
+  }
+}

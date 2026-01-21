@@ -6,6 +6,32 @@
   <title>Catálogo - Servigreen</title>
   <link rel="stylesheet" href="css/estilos.css">
 </head>
+  <div id="modalProducto" class="modal">
+  <div class="modal-box">
+    <span class="cerrar" onclick="cerrarModal()">×</span>
+
+    <div class="modal-grid">
+      <div>
+        <img id="m-img-principal">
+        <div id="m-miniaturas"></div>
+      </div>
+
+      <div>
+        <h2 id="m-nombre"></h2>
+        <p id="m-precio"></p>
+        <p id="m-descripcion"></p>
+
+        <ul id="m-specs"></ul>
+
+        <button onclick="agregarCarrito()">Agregar al carrito</button>
+        <a id="btnWs" target="_blank">
+          <button>WhatsApp</button>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <body>
   
   <!-- NAVEGACIÓN -->

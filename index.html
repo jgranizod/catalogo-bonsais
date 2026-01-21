@@ -6,84 +6,97 @@
   <title>Servigreen - Inicio</title>
   <link rel="stylesheet" href="css/estilos.css">
 </head>
+<body>
+
+  <!-- NAVEGACION -->
+  <header class="header">
+    <div class="container">
+      <div class="logo">Servigreen</div>
+      <nav class="nav">
+        <a href="index.html" class="activo">Inicio</a>
+        <a href="catalogo.html">Catalogo</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+      <button class="carrito-btn" onclick="toggleCarrito()">
+        Carrito <span id="carrito-count" class="carrito-count">0</span>
+      </button>
+    </div>
+  </header>
+
   <!-- CARRITO SIDEBAR -->
   <div id="carrito-overlay"></div>
   <div id="carrito-sidebar">
     <div class="carrito-header">
-      <h2>🛒 Tu Carrito</h2>
+      <h2>Tu Carrito</h2>
       <button class="carrito-close" onclick="toggleCarrito()">&times;</button>
     </div>
-    
+
     <div id="carrito-items"></div>
-    
+
     <div id="carrito-footer" style="display: none;">
+      <div class="carrito-resumen">
+        <div class="carrito-resumen-linea">
+          <span>Subtotal</span>
+          <span id="carrito-subtotal">$0.00</span>
+        </div>
+        <div class="carrito-resumen-linea">
+          <span>Envio</span>
+          <span id="carrito-envio">$0.00</span>
+        </div>
+        <div class="carrito-resumen-linea">
+          <span>Impuestos</span>
+          <span id="carrito-impuestos">$0.00</span>
+        </div>
+      </div>
+
       <div class="carrito-total-container">
         <span class="carrito-total-label">Total:</span>
         <span id="carrito-total">$0.00</span>
       </div>
+
       <div class="carrito-acciones">
+        <button onclick="toggleCarrito()" class="btn-seguir-comprando">Continuar comprando</button>
         <button onclick="vaciarCarrito()" class="btn-vaciar">Vaciar Carrito</button>
-        <button onclick="checkoutWhatsApp()" class="btn-checkout">
-          Realizar Pedido por WhatsApp
-        </button>
+        <button onclick="checkoutWhatsApp()" class="btn-checkout">Realizar Pedido por WhatsApp</button>
       </div>
     </div>
   </div>
 
-  <script type="module" src="js/carrito.js"></script>
-</body>
-<body>
-  
-  <!-- NAVEGACIÓN -->
-  <header class="header">
-    <div class="container">
-      <div class="logo">🌿 Servigreen</div>
-      <nav class="nav">
-        <a href="index.html" class="activo">Inicio</a>
-        <a href="catalogo.html">Catálogo</a>
-        <a href="contacto.html">Contacto</a>
-      </nav>
-      <button class="carrito-btn" onclick="alert('Carrito próximamente')">
-        🛒 <span>0</span>
-      </button>
-    </div>
-  </header>
-  <button class="carrito-btn" onclick="toggleCarrito()">
-  🛒 <span id="carrito-count" class="carrito-count">0</span>
-</button>
-
-  <!-- HERO BANNER -->
+  <!-- HERO -->
   <section class="hero">
     <h1>Naturaleza en casa</h1>
-    <p>Servigreen mejora tu salud creando sombras naturales y refugios de bienestar emocional que transforman tu calidad de vida.</p>
+    <p>Servigreen mejora tu salud creando sombras naturales y refugios de bienestar emocional.</p>
   </section>
 
-  <!-- PRODUCTOS DESTACADOS -->
+  <!-- DESTACADOS -->
   <section class="container">
     <h2 class="titulo-seccion">Productos Destacados</h2>
     <div id="destacados" class="grid">
-      <p class="loading">Cargando productos...</p>
+      <div class="producto skeleton-card"></div>
+      <div class="producto skeleton-card"></div>
+      <div class="producto skeleton-card"></div>
+      <div class="producto skeleton-card"></div>
     </div>
     <div class="centrar">
-      <a href="catalogo.html" class="btn-ver-mas">Ver Catálogo Completo</a>
+      <a href="catalogo.html" class="btn-ver-mas">Ver Catalogo Completo</a>
     </div>
   </section>
 
   <!-- FEATURES -->
   <section class="features">
     <div class="feature-card">
-      <div class="feature-icon">🌱</div>
+      <div class="feature-icon">Calidad</div>
       <h3>Calidad Garantizada</h3>
       <p>Plantas seleccionadas y cuidadas con amor</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon">🚚</div>
-      <h3>Envío Seguro</h3>
+      <div class="feature-icon">Envio</div>
+      <h3>Envio Seguro</h3>
       <p>Entrega a domicilio en perfectas condiciones</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon">💚</div>
-      <h3>Asesoría Gratuita</h3>
+      <div class="feature-icon">Ayuda</div>
+      <h3>Asesoria Gratuita</h3>
       <p>Te ayudamos a cuidar tus plantas</p>
     </div>
   </section>
@@ -109,79 +122,85 @@
 
   <!-- FOOTER -->
   <footer>
-    <p>&copy; 2024 Servigreen - Naturaleza en tu hogar</p>
+    <p>(c) 2024 Servigreen - Naturaleza en tu hogar</p>
   </footer>
 
   <script type="module">
     import { db } from "./js/firebase.js";
     import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    const modal = document.getElementById('producto-modal');
-    const modalImagen = document.getElementById('modal-imagen');
-    const modalCategoria = document.getElementById('modal-categoria');
-    const modalTitulo = document.getElementById('modal-title');
-    const modalDescripcion = document.getElementById('modal-descripcion');
-    const modalPrecio = document.getElementById('modal-precio');
-    const modalStock = document.getElementById('modal-stock');
+    const modal = document.getElementById("producto-modal");
+    const modalImagen = document.getElementById("modal-imagen");
+    const modalCategoria = document.getElementById("modal-categoria");
+    const modalTitulo = document.getElementById("modal-title");
+    const modalDescripcion = document.getElementById("modal-descripcion");
+    const modalPrecio = document.getElementById("modal-precio");
+    const modalStock = document.getElementById("modal-stock");
 
     function abrirModal(p) {
-      modalImagen.src = p.imagen || '';
-      modalImagen.alt = p.Nombre || 'Producto';
-      modalCategoria.textContent = p.categoria || 'General';
-      modalTitulo.textContent = p.Nombre || '';
-      modalDescripcion.textContent = p.descripcion || p.Descripcion || 'Sin descripcion.';
-      modalPrecio.textContent = `$${parseFloat(p.Precio || 0).toFixed(2)}`;
-      modalStock.textContent = `Stock: ${p.stock ?? 0}`;
-      modal.classList.add('activo');
-      modal.setAttribute('aria-hidden', 'false');
+      modalImagen.src = p.imagen || "";
+      modalImagen.alt = p.Nombre || "Producto";
+      modalCategoria.textContent = p.categoria || "General";
+      modalTitulo.textContent = p.Nombre || "";
+      modalDescripcion.textContent = p.descripcion || p.Descripcion || "Sin descripcion.";
+      modalPrecio.textContent = "$" + parseFloat(p.Precio || 0).toFixed(2);
+      modalStock.textContent = "Stock disponible: " + (p.stock ?? 0);
+      modal.classList.add("activo");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
     }
 
     function cerrarModal() {
-      modal.classList.remove('activo');
-      modal.setAttribute('aria-hidden', 'true');
+      modal.classList.remove("activo");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
     }
 
-    document.getElementById('modal-cerrar').addEventListener('click', cerrarModal);
-    modal.addEventListener('click', (e) => {
+    document.getElementById("modal-cerrar").addEventListener("click", cerrarModal);
+    modal.addEventListener("click", (e) => {
       if (e.target === modal) cerrarModal();
     });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') cerrarModal();
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") cerrarModal();
     });
 
     async function cargarDestacados() {
+      const contenedor = document.getElementById("destacados");
       try {
         const snapshot = await getDocs(collection(db, "productos"));
-        const contenedor = document.getElementById('destacados');
-        contenedor.innerHTML = '';
-        
+        contenedor.innerHTML = "";
+
         let count = 0;
         snapshot.forEach((doc) => {
-          if (count < 4) { // Solo primeros 4
+          if (count < 4) {
             const p = doc.data();
-            const card = document.createElement('div');
-            card.className = 'producto';
-            
+            const stock = p.stock ?? 0;
+            const badge = stock > 0 && stock <= 3 ? '<span class="badge-stock">Ultimas unidades</span>' : "";
+
+            const card = document.createElement("div");
+            card.className = "producto";
+
             card.innerHTML = `
               <img src="${p.imagen}" alt="${p.Nombre}" class="producto-img">
               <div class="producto-info">
-                <span class="categoria-tag">${p.categoria || 'General'}</span>
+                <span class="categoria-tag">${p.categoria || "General"}</span>
+                ${badge}
                 <h3>${p.Nombre}</h3>
                 <div class="precio-container">
-                  <span class="precio">$${parseFloat(p.Precio).toFixed(2)}</span>
+                  <span class="precio">$${parseFloat(p.Precio || 0).toFixed(2)}</span>
                 </div>
-                <p class="stock">Stock: ${p.stock}</p>
+                <p class="stock">Stock: ${stock}</p>
                 <button class="btn-detalles">Ver Detalles</button>
               </div>
             `;
 
-            card.addEventListener('click', () => abrirModal(p));
-            const btnDetalles = card.querySelector('.btn-detalles');
-            btnDetalles.addEventListener('click', (e) => {
+            card.addEventListener("click", () => abrirModal(p));
+            const btnDetalles = card.querySelector(".btn-detalles");
+            btnDetalles.addEventListener("click", (e) => {
               e.stopPropagation();
               abrirModal(p);
             });
-            
+
             contenedor.appendChild(card);
             count++;
           }
@@ -191,12 +210,13 @@
           contenedor.innerHTML = '<p class="loading">No hay productos disponibles</p>';
         }
       } catch (error) {
-        console.error("Error:", error);
-        document.getElementById('destacados').innerHTML = '<p class="loading">Error al cargar productos</p>';
+        contenedor.innerHTML = '<p class="loading">Error al cargar productos</p>';
       }
     }
 
     cargarDestacados();
   </script>
+
+  <script type="module" src="js/carrito.js"></script>
 </body>
 </html>

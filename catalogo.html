@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo - Servigreen</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  
+  <!-- NAVEGACIÓN -->
+  <header class="header">
+    <div class="container">
+      <div class="logo">🌿 Servigreen</div>
+      <nav class="nav">
+        <a href="index.html">Inicio</a>
+        <a href="catalogo.html" class="activo">Catálogo</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+      <button class="carrito-btn" onclick="toggleCarrito()">
+        🛒 <span id="carrito-count" class="carrito-count">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- TÍTULO -->
+  <div class="container">
+    <h1 class="titulo-seccion">Catálogo de Productos</h1>
+    
+    <!-- FILTROS -->
+    <div class="filtros">
+      <button class="filtro-btn activo" onclick="filtrar('todos')">
+        📦 Todos
+      </button>
+      <button class="filtro-btn" onclick="filtrar('bonsai')">
+        🌳 Bonsáis
+      </button>
+      <button class="filtro-btn" onclick="filtrar('plantas')">
+        🌿 Plantas
+      </button>
+      <button class="filtro-btn" onclick="filtrar('suculentas')">
+        🌵 Suculentas
+      </button>
+      <button class="filtro-btn" onclick="filtrar('cactus')">
+        🌵 Cactus
+      </button>
+    </div>
+
+    <!-- PRODUCTOS -->
+    <div id="productos" class="grid">
+      <p class="loading">Cargando productos...</p>
+    </div>
+  </div>
+
+  <!-- CARRITO SIDEBAR -->
+  <div id="carrito-overlay"></div>
+  <div id="carrito-sidebar">
+    <div class="carrito-header">
+      <h2>🛒 Tu Carrito</h2>
+      <button class="carrito-close" onclick="toggleCarrito()">&times;</button>
+    </div>
+    
+    <div id="carrito-items"></div>
+    
+    <div id="carrito-footer" style="display: none;">
+      <div class="carrito-total-container">
+        <span class="carrito-total-label">Total:</span>
+        <span id="carrito-total">$0.00</span>
+      </div>
+      <div class="carrito-acciones">
+        <button onclick="vaciarCarrito()" class="btn-vaciar">Vaciar Carrito</button>
+        <button onclick="checkoutWhatsApp()" class="btn-checkout">
+          Realizar Pedido por WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2024 Servigreen - Naturaleza en tu hogar</p>
+  </footer>
+
+  <script type="module">
+    import { db } from "./js/firebase.js";
+    import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    let todosLosProductos = [];
+
+    // Cargar todos los productos
+    async function cargarProductos() {
+      try {
+        const snapshot = await getDocs(collection(db, "productos"));
+        const contenedor = document.getElementById('productos');
+        
+        todosLosProductos = [];
+        snapshot.forEach((doc) => {
+          todosLosProductos.push({ id: doc.id, ...doc.data() });
+        });
+
+        mostrarProductos(todosLosProductos);
+        console.log(`✅ ${todosLosProductos.length} productos cargados`);
+
+      } catch (error) {
+        console.error("Error:", error);
+        document.getElementById('productos').innerHTML = '<p class="loading">Error al cargar productos</p>';
+      }
+    }
+
+    // Mostrar productos
+    function mostrarProductos(productos) {
+      const contenedor = document.getElementById('productos');
+      
+      if (productos.length === 0) {
+        contenedor.innerHTML = '<p class="loading">No hay productos en esta categoría</p>';
+        return;
+      }
+      
+      contenedor.innerHTML = '';
+      productos.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'producto';
+        
+        card.innerHTML = `
+          <img 
+            src="${p.imagen}" 
+            alt="${p.Nombre}" 
+            class="producto-img"
+            onerror="this.src='https://via.placeholder.com/280?text=Sin+Imagen'"
+          >
+          <div class="producto-info">
+            <span class="categoria-tag">${p.categoria || 'General'}</span>
+            <h3>${p.Nombre}</h3>
+            <div class="precio-container">
+              <span class="precio">$${parseFloat(p.Precio).toFixed(2)}</span>
+            </div>
+            <p class="stock">Stock disponible: ${p.stock}</p>
+            ${
+              p.stock > 0
+                ? `<button onclick="agregarAlCarrito('${p.id}', '${p.Nombre.replace(/'/g, "\\'")}', ${p.Precio}, '${p.imagen}', ${p.stock})">
+                     Añadir al carrito
+                   </button>`
+                : `<button disabled>Agotado</button>`
+            }
+          </div>
+        `;
+        
+        contenedor.appendChild(card);
+      });
+    }
+
+    // Filtrar por categoría
+    window.filtrar = function(categoria) {
+      const filtrados = categoria === 'todos' 
+        ? todosLosProductos 
+        : todosLosProductos.filter(p => p.categoria === categoria);
+      
+      mostrarProductos(filtrados);
+      
+      // Marcar botón activo
+      document.querySelectorAll('.filtro-btn').forEach(btn => {
+        btn.classList.remove('activo');
+      });
+      event.target.classList.add('activo');
+    };
+
+    // Iniciar
+    cargarProductos();
+  </script>
+
+  <!-- CARRITO SCRIPT -->
+  <script src="js/carrito.js"></script>
+</body>
+</html>

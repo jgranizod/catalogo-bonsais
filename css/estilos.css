@@ -936,3 +936,72 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== EASTER EGG BONSAI ===== */
+.easter-egg {
+  margin-top: 80px;
+  padding: 40px 0 80px;
+}
+.egg-subtitulo {
+  text-align: center;
+  color: #666;
+  margin-bottom: 20px;
+}
+.bonsai-escena {
+  position: relative;
+  min-height: 520px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.bonsai-svg {
+  width: 600px;
+  max-width: 95%;
+}
+
+.hoja {
+  position: absolute;
+  width: 200px;
+  min-height: 120px;
+  background: linear-gradient(145deg, #2d5016, #3c6b1e);
+  color: #fff;
+  padding: 14px;
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  cursor: grab;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hoja:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 30px rgba(0,0,0,0.2);
+}
+
+.hoja-titulo {
+  font-weight: 700;
+  display: block;
+  margin-bottom: 8px;
+}
+.hoja-detalle {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  opacity: 0.9;
+}
+
+.hoja-2 { top: 40px; left: 120px; }
+.hoja-3 { top: 80px; right: 120px; }
+.hoja-4 { top: 200px; left: 200px; }
+.hoja-5 { top: 220px; right: 200px; }
+
+.arrastrando {
+  cursor: grabbing;
+  transform: scale(1.02);
+}
+
+.caer {
+  animation: caerHoja 2s ease forwards;
+}
+
+@keyframes caerHoja {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(220px) rotate(25deg); opacity: 0.6; }
+}

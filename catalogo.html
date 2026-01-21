@@ -17,17 +17,37 @@
         <a href="catalogo.html" class="activo">Catalogo</a>
         <a href="contacto.html">Contacto</a>
       </nav>
-      <button class="carrito-btn" onclick="toggleCarrito()">
-        Carrito <span id="carrito-count" class="carrito-count">0</span>
-      </button>
+      <div class="header-actions">
+        <button id="theme-toggle" class="btn-secundario">Modo oscuro</button>
+        <button class="carrito-btn" onclick="toggleCarrito()">
+          Carrito <span id="carrito-count" class="carrito-count">0</span>
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- TITULO -->
   <div class="container">
     <h1 class="titulo-seccion">Catalogo de Productos</h1>
 
-    <!-- FILTROS -->
+    <!-- BUSCADOR + FILTROS -->
+    <div class="filtros filtros-avanzados">
+      <input id="buscador" type="text" placeholder="Buscar por nombre" class="input-busqueda">
+
+      <div class="filtro-precio">
+        <label>Precio max:</label>
+        <input id="precio-max" type="range" min="0" max="200" value="200">
+        <span id="precio-max-label">$200</span>
+      </div>
+
+      <select id="ordenar" class="select-orden">
+        <option value="nuevo">Ordenar: Nuevo</option>
+        <option value="precio-asc">Precio: Menor a mayor</option>
+        <option value="precio-desc">Precio: Mayor a menor</option>
+        <option value="stock-desc">Stock: Mayor a menor</option>
+      </select>
+    </div>
+
+    <!-- FILTROS CATEGORIA -->
     <div class="filtros">
       <button class="filtro-btn activo" onclick="filtrar('todos')">Todos</button>
       <button class="filtro-btn" onclick="filtrar('bonsai')">Bonsais</button>
@@ -36,7 +56,6 @@
       <button class="filtro-btn" onclick="filtrar('cactus')">Cactus</button>
     </div>
 
-    <!-- PRODUCTOS -->
     <div id="productos" class="grid">
       <div class="producto skeleton-card"></div>
       <div class="producto skeleton-card"></div>
@@ -103,7 +122,6 @@
     </div>
   </div>
 
-  <!-- FOOTER -->
   <footer>
     <p>(c) 2024 Servigreen - Naturaleza en tu hogar</p>
   </footer>
@@ -114,6 +132,9 @@
 
     let todosLosProductos = [];
     let categoriaActual = "todos";
+    let textoBusqueda = "";
+    let precioMax = 200;
+    let ordenActual = "nuevo";
 
     const modal = document.getElementById("producto-modal");
     const modalImagen = document.getElementById("modal-imagen");
@@ -143,12 +164,40 @@
     }
 
     document.getElementById("modal-cerrar").addEventListener("click", cerrarModal);
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) cerrarModal();
-    });
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") cerrarModal();
-    });
+    modal.addEventListener("click", (e) => { if (e.target === modal) cerrarModal(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") cerrarModal(); });
+
+    function obtenerFavoritos() {
+      const data = localStorage.getItem("favoritos");
+      return data ? JSON.parse(data) : [];
+    }
+
+    function guardarFavoritos(lista) {
+      localStorage.setItem("favoritos", JSON.stringify(lista));
+    }
+
+    function toggleFavorito(id) {
+      const favs = obtenerFavoritos();
+      const i = favs.indexOf(id);
+      if (i >= 0) favs.splice(i, 1);
+      else favs.push(id);
+      guardarFavoritos(favs);
+      aplicarFiltro();
+    }
+
+    function ordenarProductos(lista) {
+      const copia = lista.slice();
+      if (ordenActual === "precio-asc") {
+        copia.sort((a, b) => (a.Precio || 0) - (b.Precio || 0));
+      } else if (ordenActual === "precio-desc") {
+        copia.sort((a, b) => (b.Precio || 0) - (a.Precio || 0));
+      } else if (ordenActual === "stock-desc") {
+        copia.sort((a, b) => (b.stock || 0) - (a.stock || 0));
+      } else {
+        copia.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      }
+      return copia;
+    }
 
     function mostrarProductos(productos) {
       const contenedor = document.getElementById("productos");
@@ -157,7 +206,9 @@
         return;
       }
 
+      const favoritos = obtenerFavoritos();
       contenedor.innerHTML = "";
+
       productos.forEach((p) => {
         const card = document.createElement("div");
         card.className = "producto";
@@ -166,13 +217,15 @@
         const badge = stock > 0 && stock <= 3 ? '<span class="badge-stock">Ultimas unidades</span>' : "";
         const nombre = p.Nombre || "";
         const nombreEscapado = nombre.replace(/'/g, "\\'");
+        const favoritoActivo = favoritos.includes(p.id) ? "favorito activo" : "favorito";
 
         card.innerHTML = `
-          <img src="${p.imagen}" alt="${nombre}" class="producto-img"
+          <img src="${p.imagen}" alt="${nombre}" class="producto-img" loading="lazy"
                onerror="this.src='https://via.placeholder.com/280?text=Sin+Imagen'">
           <div class="producto-info">
             <span class="categoria-tag">${p.categoria || "General"}</span>
             ${badge}
+            <button class="${favoritoActivo}" data-id="${p.id}">Favorito</button>
             <h3>${nombre}</h3>
             <div class="precio-container">
               <span class="precio">$${parseFloat(p.Precio || 0).toFixed(2)}</span>
@@ -187,9 +240,16 @@
         `;
 
         card.addEventListener("click", () => abrirModal(p));
+
         const btnCarrito = card.querySelector("button");
-        if (btnCarrito) {
-          btnCarrito.addEventListener("click", (e) => e.stopPropagation());
+        if (btnCarrito) btnCarrito.addEventListener("click", (e) => e.stopPropagation());
+
+        const favBtn = card.querySelector(".favorito");
+        if (favBtn) {
+          favBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            toggleFavorito(p.id);
+          });
         }
 
         contenedor.appendChild(card);
@@ -197,21 +257,48 @@
     }
 
     function aplicarFiltro() {
-      const filtrados = categoriaActual === "todos"
-        ? todosLosProductos
-        : todosLosProductos.filter((p) => p.categoria === categoriaActual);
+      let filtrados = todosLosProductos;
+
+      if (categoriaActual !== "todos") {
+        filtrados = filtrados.filter((p) => p.categoria === categoriaActual);
+      }
+
+      if (textoBusqueda) {
+        filtrados = filtrados.filter((p) =>
+          (p.Nombre || "").toLowerCase().includes(textoBusqueda)
+        );
+      }
+
+      filtrados = filtrados.filter((p) => (p.Precio || 0) <= precioMax);
+      filtrados = ordenarProductos(filtrados);
+
       mostrarProductos(filtrados);
     }
 
     window.filtrar = function(categoria) {
       categoriaActual = categoria;
       aplicarFiltro();
-
-      document.querySelectorAll(".filtro-btn").forEach((btn) => {
-        btn.classList.remove("activo");
-      });
+      document.querySelectorAll(".filtro-btn").forEach((btn) => btn.classList.remove("activo"));
       event.target.classList.add("activo");
     };
+
+    document.getElementById("buscador").addEventListener("input", (e) => {
+      textoBusqueda = e.target.value.trim().toLowerCase();
+      aplicarFiltro();
+    });
+
+    const precioInput = document.getElementById("precio-max");
+    const precioLabel = document.getElementById("precio-max-label");
+    precioInput.addEventListener("input", () => {
+      precioMax = Number(precioInput.value);
+      precioLabel.textContent = "$" + precioMax;
+      aplicarFiltro();
+    });
+
+    document.getElementById("ordenar").addEventListener("change", (e) => {
+      ordenActual = e.target.value;
+      aplicarFiltro();
+    });
 
     function cargarProductos() {
       const contenedor = document.getElementById("productos");
@@ -230,5 +317,6 @@
   </script>
 
   <script type="module" src="js/carrito.js"></script>
+  <script src="js/ui.js"></script>
 </body>
 </html>

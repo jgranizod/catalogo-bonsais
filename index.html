@@ -17,9 +17,12 @@
         <a href="catalogo.html">Catalogo</a>
         <a href="contacto.html">Contacto</a>
       </nav>
-      <button class="carrito-btn" onclick="toggleCarrito()">
-        Carrito <span id="carrito-count" class="carrito-count">0</span>
-      </button>
+      <div class="header-actions">
+        <button id="theme-toggle" class="btn-secundario">Modo oscuro</button>
+        <button class="carrito-btn" onclick="toggleCarrito()">
+          Carrito <span id="carrito-count" class="carrito-count">0</span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -82,22 +85,24 @@
     </div>
   </section>
 
-  <!-- FEATURES -->
-  <section class="features">
-    <div class="feature-card">
-      <div class="feature-icon">Calidad</div>
-      <h3>Calidad Garantizada</h3>
-      <p>Plantas seleccionadas y cuidadas con amor</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">Envio</div>
-      <h3>Envio Seguro</h3>
-      <p>Entrega a domicilio en perfectas condiciones</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">Ayuda</div>
-      <h3>Asesoria Gratuita</h3>
-      <p>Te ayudamos a cuidar tus plantas</p>
+  <!-- FAQ -->
+  <section class="faq">
+    <div class="container">
+      <h2 class="titulo-seccion">Preguntas Frecuentes</h2>
+      <div class="faq-grid">
+        <div class="faq-card">
+          <h3>Cuanto tarda el envio?</h3>
+          <p>Entre 24 y 72 horas en ciudad.</p>
+        </div>
+        <div class="faq-card">
+          <h3>Como cuido mi bonsai?</h3>
+          <p>Incluimos instrucciones y asesoramiento.</p>
+        </div>
+        <div class="faq-card">
+          <h3>Puedo cambiar un producto?</h3>
+          <p>Si, dentro de 7 dias.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -120,7 +125,6 @@
     </div>
   </div>
 
-  <!-- FOOTER -->
   <footer>
     <p>(c) 2024 Servigreen - Naturaleza en tu hogar</p>
   </footer>
@@ -157,12 +161,8 @@
     }
 
     document.getElementById("modal-cerrar").addEventListener("click", cerrarModal);
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) cerrarModal();
-    });
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") cerrarModal();
-    });
+    modal.addEventListener("click", (e) => { if (e.target === modal) cerrarModal(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") cerrarModal(); });
 
     async function cargarDestacados() {
       const contenedor = document.getElementById("destacados");
@@ -218,5 +218,6 @@
   </script>
 
   <script type="module" src="js/carrito.js"></script>
+  <script src="js/ui.js"></script>
 </body>
 </html>

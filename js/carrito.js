@@ -123,13 +123,15 @@ window.eliminarDelCarrito = async function(id) {
 };
 
 async function limpiarCarrito(restaurarStock) {
+  const carrito = obtenerCarrito();
+
   if (restaurarStock) {
-    const carrito = obtenerCarrito();
     for (const item of carrito) {
       const ok = await ajustarStock(item.id, item.cantidad);
       if (!ok) return false;
     }
   }
+
   localStorage.removeItem("carritoServigreen");
   actualizarContador();
   renderizarCarrito();
@@ -137,11 +139,11 @@ async function limpiarCarrito(restaurarStock) {
 }
 
 window.vaciarCarrito = async function() {
-  if (confirm("Estas seguro de vaciar el carrito?")) {
-    const ok = await limpiarCarrito(true);
-    if (ok) {
-      mostrarNotificacion("Carrito vaciado");
-    }
+  if (!confirm("Estas seguro de vaciar el carrito?")) return;
+
+  const ok = await limpiarCarrito(true);
+  if (ok) {
+    mostrarNotificacion("Carrito vaciado");
   }
 };
 
@@ -239,24 +241,24 @@ window.checkoutWhatsApp = async function() {
     return;
   }
 
-  let mensaje = "*NUEVO PEDIDO - SERVIGREEN*\\n\\n";
-  mensaje += "*PRODUCTOS:*\\n";
-  mensaje += "------------------------------\\n";
+  let mensaje = "*NUEVO PEDIDO - SERVIGREEN*\n\n";
+  mensaje += "*PRODUCTOS:*\n";
+  mensaje += "------------------------------\n";
 
   carrito.forEach((item, index) => {
-    mensaje += `${index + 1}. *${item.nombre}*\\n`;
-    mensaje += `   Cantidad: ${item.cantidad}\\n`;
-    mensaje += `   Precio: $${item.precio.toFixed(2)}\\n`;
-    mensaje += `   Subtotal: $${(item.precio * item.cantidad).toFixed(2)}\\n\\n`;
+    mensaje += (index + 1) + ". *" + item.nombre + "*\n";
+    mensaje += "   Cantidad: " + item.cantidad + "\n";
+    mensaje += "   Precio: $" + item.precio.toFixed(2) + "\n";
+    mensaje += "   Subtotal: $" + (item.precio * item.cantidad).toFixed(2) + "\n\n";
   });
 
   const total = calcularTotal();
-  mensaje += "------------------------------\\n";
-  mensaje += `*TOTAL: $${total.toFixed(2)}*\\n\\n`;
+  mensaje += "------------------------------\n";
+  mensaje += "*TOTAL: $" + total.toFixed(2) + "*\n\n";
   mensaje += "Por favor, confirma tu direccion de entrega.";
 
   const mensajeCodificado = encodeURIComponent(mensaje);
-  const urlWhatsApp = `https://wa.me/${WHATSAPP_NUMERO}?text=${mensajeCodificado}`;
+  const urlWhatsApp = "https://wa.me/" + WHATSAPP_NUMERO + "?text=" + mensajeCodificado;
   window.open(urlWhatsApp, "_blank");
 
   setTimeout(async () => {

@@ -5,8 +5,86 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Servigreen - Inicio</title>
   <link rel="stylesheet" href="css/estilos.css">
-  <link rel="stylesheet" href="animaciones.css">
 </head>
+<body>
+  <!-- NAVEGACIÓN -->
+  <header class="header">
+    <div class="container">
+      <div class="logo">🌿 Servigreen</div>
+      <nav class="nav">
+        <a href="index.html" class="activo">Inicio</a>
+        <a href="catalogo.html">Catálogo</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+      <button class="carrito-btn" onclick="toggleCarrito()">
+        🛒 <span id="carrito-count" class="carrito-count">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO BANNER -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Naturaleza en casa</h1>
+        <p>Servigreen mejora tu salud creando sombras naturales y refugios de bienestar emocional que transforman tu calidad de vida.</p>
+        <div class="hero-actions">
+          <a class="btn-primario" href="catalogo.html">Explorar catálogo</a>
+          <a class="btn-secundario" href="https://wa.me/593985700805" target="_blank" rel="noreferrer">Hablar por WhatsApp</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRODUCTOS DESTACADOS -->
+    <section class="container">
+      <h2 class="titulo-seccion">Productos Destacados</h2>
+      <div id="destacados" class="grid">
+        <p class="loading">Cargando productos...</p>
+      </div>
+      <div class="centrar">
+        <a href="catalogo.html" class="btn-ver-mas">Ver Catálogo Completo</a>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features">
+      <div class="feature-card">
+        <div class="feature-icon">🌱</div>
+        <h3>Calidad Garantizada</h3>
+        <p>Plantas seleccionadas y cuidadas con amor</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🚚</div>
+        <h3>Envío Seguro</h3>
+        <p>Entrega a domicilio en perfectas condiciones</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💚</div>
+        <h3>Asesoría Gratuita</h3>
+        <p>Te ayudamos a cuidar tus plantas</p>
+      </div>
+    </section>
+
+    <section class="valor">
+      <div class="container valor-grid">
+        <div>
+          <h2>Tu espacio, más verde y más vivo</h2>
+          <p>Seleccionamos cada especie pensando en la iluminación, el clima y el estilo de tu hogar. Recibe recomendaciones personalizadas para que tus plantas duren y crezcan con fuerza.</p>
+        </div>
+        <ul class="valor-lista">
+          <li>Guías prácticas de riego y ubicación.</li>
+          <li>Empaque seguro para proteger cada envío.</li>
+          <li>Asesoría rápida por WhatsApp.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2024 Servigreen - Naturaleza en tu hogar</p>
+  </footer>
+
   <!-- CARRITO SIDEBAR -->
   <div id="carrito-overlay"></div>
   <div id="carrito-sidebar">
@@ -14,9 +92,9 @@
       <h2>🛒 Tu Carrito</h2>
       <button class="carrito-close" onclick="toggleCarrito()">&times;</button>
     </div>
-    
+
     <div id="carrito-items"></div>
-    
+
     <div id="carrito-footer" style="display: none;">
       <div class="carrito-total-container">
         <span class="carrito-total-label">Total:</span>
@@ -32,69 +110,6 @@
   </div>
 
   <script src="js/carrito.js"></script>
-  <script src="animaciones.js"></script>
-</body>
-<body>
-  
-  <!-- NAVEGACIÓN -->
-  <header class="header">
-    <div class="container">
-      <div class="logo">🌿 Servigreen</div>
-      <nav class="nav">
-        <a href="index.html" class="activo">Inicio</a>
-        <a href="catalogo.html">Catálogo</a>
-        <a href="contacto.html">Contacto</a>
-      </nav>
-      <button class="carrito-btn" onclick="alert('Carrito próximamente')">
-        🛒 <span>0</span>
-      </button>
-    </div>
-  </header>
-  <button class="carrito-btn" onclick="toggleCarrito()">
-  🛒 <span id="carrito-count" class="carrito-count">0</span>
-</button>
-
-  <!-- HERO BANNER -->
-  <section class="hero">
-    <h1>Naturaleza en casa</h1>
-    <p>Servigreen mejora tu salud creando sombras naturales y refugios de bienestar emocional que transforman tu calidad de vida.</p>
-  </section>
-
-  <!-- PRODUCTOS DESTACADOS -->
-  <section class="container">
-    <h2 class="titulo-seccion">Productos Destacados</h2>
-    <div id="destacados" class="grid">
-      <p class="loading">Cargando productos...</p>
-    </div>
-    <div class="centrar">
-      <a href="catalogo.html" class="btn-ver-mas">Ver Catálogo Completo</a>
-    </div>
-  </section>
-
-  <!-- FEATURES -->
-  <section class="features">
-    <div class="feature-card">
-      <div class="feature-icon">🌱</div>
-      <h3>Calidad Garantizada</h3>
-      <p>Plantas seleccionadas y cuidadas con amor</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🚚</div>
-      <h3>Envío Seguro</h3>
-      <p>Entrega a domicilio en perfectas condiciones</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">💚</div>
-      <h3>Asesoría Gratuita</h3>
-      <p>Te ayudamos a cuidar tus plantas</p>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <p>&copy; 2024 Servigreen - Naturaleza en tu hogar</p>
-  </footer>
-
   <script type="module">
     import { db } from "./js/firebase.js";
     import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -121,7 +136,13 @@
                   <span class="precio">$${parseFloat(p.Precio).toFixed(2)}</span>
                 </div>
                 <p class="stock">Stock: ${p.stock}</p>
-                <button onclick="alert('Producto: ${p.Nombre}')">Ver Detalles</button>
+                ${
+                  p.stock > 0
+                    ? `<button onclick="agregarAlCarrito('${doc.id}', '${p.Nombre.replace(/'/g, "\\'")}', ${p.Precio}, '${p.imagen}', ${p.stock})">
+                         Añadir al carrito
+                       </button>`
+                    : `<button disabled>Agotado</button>`
+                }
               </div>
             `;
             

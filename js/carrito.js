@@ -1,10 +1,5 @@
 import { db } from "./firebase.js";
-import {
-  doc,
-  runTransaction
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-// Sistema de carrito con localStorage
+import { doc, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const WHATSAPP_NUMERO = "593985700805";
 
@@ -48,7 +43,6 @@ async function ajustarStock(id, delta) {
 
 window.agregarAlCarrito = async function(id, nombre, precio, imagen, stock) {
   let carrito = obtenerCarrito();
-
   const productoExistente = carrito.find((item) => item.id === id);
 
   if (productoExistente) {
@@ -75,7 +69,8 @@ window.agregarAlCarrito = async function(id, nombre, precio, imagen, stock) {
   guardarCarrito(carrito);
   mostrarNotificacion("Producto agregado al carrito");
 
-  if (document.getElementById("carrito-sidebar").classList.contains("abierto")) {
+  const sidebar = document.getElementById("carrito-sidebar");
+  if (sidebar && sidebar.classList.contains("abierto")) {
     renderizarCarrito();
   }
 };
@@ -170,10 +165,12 @@ function renderizarCarrito() {
   const contenedor = document.getElementById("carrito-items");
   const footer = document.getElementById("carrito-footer");
 
+  if (!contenedor || !footer) return;
+
   if (carrito.length === 0) {
     contenedor.innerHTML = `
       <div class="carrito-vacio">
-        <div class="carrito-vacio-icon">🛒</div>
+        <div class="carrito-vacio-icon">Carrito</div>
         <p>Tu carrito esta vacio</p>
         <a href="catalogo.html" class="btn-seguir-comprando">Ver Catalogo</a>
       </div>
@@ -200,7 +197,7 @@ function renderizarCarrito() {
       </div>
       <div class="carrito-item-acciones">
         <p class="carrito-item-subtotal">$${(item.precio * item.cantidad).toFixed(2)}</p>
-        <button onclick="eliminarDelCarrito('${item.id}')" class="btn-eliminar">🗑</button>
+        <button onclick="eliminarDelCarrito('${item.id}')" class="btn-eliminar">X</button>
       </div>
     `;
     contenedor.appendChild(itemDiv);
@@ -214,6 +211,8 @@ function renderizarCarrito() {
 window.toggleCarrito = function() {
   const sidebar = document.getElementById("carrito-sidebar");
   const overlay = document.getElementById("carrito-overlay");
+
+  if (!sidebar || !overlay) return;
 
   sidebar.classList.toggle("abierto");
   overlay.classList.toggle("activo");
@@ -240,20 +239,20 @@ window.checkoutWhatsApp = async function() {
     return;
   }
 
-  let mensaje = "*NUEVO PEDIDO - SERVIGREEN*\n\n";
-  mensaje += "*PRODUCTOS:*\n";
-  mensaje += "------------------------------\n";
+  let mensaje = "*NUEVO PEDIDO - SERVIGREEN*\\n\\n";
+  mensaje += "*PRODUCTOS:*\\n";
+  mensaje += "------------------------------\\n";
 
   carrito.forEach((item, index) => {
-    mensaje += `${index + 1}. *${item.nombre}*\n`;
-    mensaje += `   Cantidad: ${item.cantidad}\n`;
-    mensaje += `   Precio: $${item.precio.toFixed(2)}\n`;
-    mensaje += `   Subtotal: $${(item.precio * item.cantidad).toFixed(2)}\n\n`;
+    mensaje += `${index + 1}. *${item.nombre}*\\n`;
+    mensaje += `   Cantidad: ${item.cantidad}\\n`;
+    mensaje += `   Precio: $${item.precio.toFixed(2)}\\n`;
+    mensaje += `   Subtotal: $${(item.precio * item.cantidad).toFixed(2)}\\n\\n`;
   });
 
   const total = calcularTotal();
-  mensaje += "------------------------------\n";
-  mensaje += `*TOTAL: $${total.toFixed(2)}*\n\n`;
+  mensaje += "------------------------------\\n";
+  mensaje += `*TOTAL: $${total.toFixed(2)}*\\n\\n`;
   mensaje += "Por favor, confirma tu direccion de entrega.";
 
   const mensajeCodificado = encodeURIComponent(mensaje);

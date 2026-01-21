@@ -3,6 +3,15 @@ import { doc, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/f
 
 const WHATSAPP_NUMERO = "593985700805";
 
+// Cola para evitar carreras por clicks rapidos
+let colaOperaciones = Promise.resolve();
+function enCola(tarea) {
+  colaOperaciones = colaOperaciones.then(tarea, tarea).catch((e) => {
+    console.error("Error en carrito:", e);
+  });
+  return colaOperaciones;
+}
+
 function obtenerCarrito() {
   const carrito = localStorage.getItem("carritoServigreen");
   return carrito ? JSON.parse(carrito) : [];
@@ -41,85 +50,90 @@ async function ajustarStock(id, delta) {
   }
 }
 
-window.agregarAlCarrito = async function(id, nombre, precio, imagen, stock) {
-  let carrito = obtenerCarrito();
-  const productoExistente = carrito.find((item) => item.id === id);
+window.agregarAlCarrito = function(id, nombre, precio, imagen, stock) {
+  return enCola(async () => {
+    let carrito = obtenerCarrito();
+    const productoExistente = carrito.find((item) => item.id === id);
 
-  if (productoExistente) {
-    if (productoExistente.cantidad >= stock) {
-      alert("No hay mas stock disponible");
-      return;
+    const ok = await ajustarStock(id, -1);
+    if (!ok) return;
+
+    if (productoExistente) {
+      productoExistente.cantidad++;
+      productoExistente.stock = Math.max(0, (productoExistente.stock ?? stock ?? 0) - 1);
+    } else {
+      carrito.push({
+        id,
+        nombre,
+        precio: parseFloat(precio),
+        imagen,
+        cantidad: 1,
+        stock: Math.max(0, (stock ?? 0) - 1)
+      });
     }
-    const ok = await ajustarStock(id, -1);
-    if (!ok) return;
-    productoExistente.cantidad++;
-  } else {
-    const ok = await ajustarStock(id, -1);
-    if (!ok) return;
-    carrito.push({
-      id,
-      nombre,
-      precio: parseFloat(precio),
-      imagen,
-      cantidad: 1,
-      stock
-    });
-  }
 
-  guardarCarrito(carrito);
-  mostrarNotificacion("Producto agregado al carrito");
+    guardarCarrito(carrito);
+    mostrarNotificacion("Producto agregado al carrito");
 
-  const sidebar = document.getElementById("carrito-sidebar");
-  if (sidebar && sidebar.classList.contains("abierto")) {
-    renderizarCarrito();
-  }
+    const sidebar = document.getElementById("carrito-sidebar");
+    if (sidebar && sidebar.classList.contains("abierto")) {
+      renderizarCarrito();
+    }
+  });
 };
 
-window.aumentarCantidad = async function(id) {
-  const carrito = obtenerCarrito();
-  const producto = carrito.find((item) => item.id === id);
+window.aumentarCantidad = function(id) {
+  return enCola(async () => {
+    const carrito = obtenerCarrito();
+    const producto = carrito.find((item) => item.id === id);
+    if (!producto) return;
 
-  if (producto) {
-    if (producto.cantidad >= producto.stock) {
-      alert("No hay mas stock disponible");
-      return;
-    }
     const ok = await ajustarStock(id, -1);
     if (!ok) return;
+
     producto.cantidad++;
+    producto.stock = Math.max(0, (producto.stock ?? 0) - 1);
+
     guardarCarrito(carrito);
     renderizarCarrito();
-  }
+  });
 };
 
-window.disminuirCantidad = async function(id) {
-  let carrito = obtenerCarrito();
-  const producto = carrito.find((item) => item.id === id);
+window.disminuirCantidad = function(id) {
+  return enCola(async () => {
+    let carrito = obtenerCarrito();
+    const producto = carrito.find((item) => item.id === id);
+    if (!producto) return;
 
-  if (producto) {
     const ok = await ajustarStock(id, 1);
     if (!ok) return;
+
     if (producto.cantidad > 1) {
       producto.cantidad--;
+      producto.stock = (producto.stock ?? 0) + 1;
     } else {
       carrito = carrito.filter((item) => item.id !== id);
     }
+
     guardarCarrito(carrito);
     renderizarCarrito();
-  }
+  });
 };
 
-window.eliminarDelCarrito = async function(id) {
-  let carrito = obtenerCarrito();
-  const producto = carrito.find((item) => item.id === id);
-  if (producto) {
+window.eliminarDelCarrito = function(id) {
+  return enCola(async () => {
+    let carrito = obtenerCarrito();
+    const producto = carrito.find((item) => item.id === id);
+    if (!producto) return;
+
     const ok = await ajustarStock(id, producto.cantidad);
     if (!ok) return;
-  }
-  carrito = carrito.filter((item) => item.id !== id);
-  guardarCarrito(carrito);
-  renderizarCarrito();
-  mostrarNotificacion("Producto eliminado");
+
+    carrito = carrito.filter((item) => item.id !== id);
+    guardarCarrito(carrito);
+    renderizarCarrito();
+    mostrarNotificacion("Producto eliminado");
+  });
 };
 
 async function limpiarCarrito(restaurarStock) {
@@ -138,13 +152,15 @@ async function limpiarCarrito(restaurarStock) {
   return true;
 }
 
-window.vaciarCarrito = async function() {
-  if (!confirm("Estas seguro de vaciar el carrito?")) return;
+window.vaciarCarrito = function() {
+  return enCola(async () => {
+    if (!confirm("Estas seguro de vaciar el carrito?")) return;
 
-  const ok = await limpiarCarrito(true);
-  if (ok) {
-    mostrarNotificacion("Carrito vaciado");
-  }
+    const ok = await limpiarCarrito(true);
+    if (ok) {
+      mostrarNotificacion("Carrito vaciado");
+    }
+  });
 };
 
 function calcularTotal() {
@@ -233,40 +249,41 @@ document.addEventListener("DOMContentLoaded", () => {
   actualizarContador();
 });
 
-window.checkoutWhatsApp = async function() {
-  const carrito = obtenerCarrito();
-
-  if (carrito.length === 0) {
-    alert("El carrito esta vacio");
-    return;
-  }
-
-  let mensaje = "*NUEVO PEDIDO - SERVIGREEN*\n\n";
-  mensaje += "*PRODUCTOS:*\n";
-  mensaje += "------------------------------\n";
-
-  carrito.forEach((item, index) => {
-    mensaje += (index + 1) + ". *" + item.nombre + "*\n";
-    mensaje += "   Cantidad: " + item.cantidad + "\n";
-    mensaje += "   Precio: $" + item.precio.toFixed(2) + "\n";
-    mensaje += "   Subtotal: $" + (item.precio * item.cantidad).toFixed(2) + "\n\n";
-  });
-
-  const total = calcularTotal();
-  mensaje += "------------------------------\n";
-  mensaje += "*TOTAL: $" + total.toFixed(2) + "*\n\n";
-  mensaje += "Por favor, confirma tu direccion de entrega.";
-
-  const mensajeCodificado = encodeURIComponent(mensaje);
-  const urlWhatsApp = "https://wa.me/" + WHATSAPP_NUMERO + "?text=" + mensajeCodificado;
-  window.open(urlWhatsApp, "_blank");
-
-  setTimeout(async () => {
-    if (confirm("Deseas vaciar el carrito?")) {
-      await limpiarCarrito(false);
-      toggleCarrito();
+window.checkoutWhatsApp = function() {
+  return enCola(async () => {
+    const carrito = obtenerCarrito();
+    if (carrito.length === 0) {
+      alert("El carrito esta vacio");
+      return;
     }
-  }, 1000);
+
+    let mensaje = "*NUEVO PEDIDO - SERVIGREEN*\\n\\n";
+    mensaje += "*PRODUCTOS:*\\n";
+    mensaje += "------------------------------\\n";
+
+    carrito.forEach((item, index) => {
+      mensaje += (index + 1) + ". *" + item.nombre + "*\\n";
+      mensaje += "   Cantidad: " + item.cantidad + "\\n";
+      mensaje += "   Precio: $" + item.precio.toFixed(2) + "\\n";
+      mensaje += "   Subtotal: $" + (item.precio * item.cantidad).toFixed(2) + "\\n\\n";
+    });
+
+    const total = calcularTotal();
+    mensaje += "------------------------------\\n";
+    mensaje += "*TOTAL: $" + total.toFixed(2) + "*\\n\\n";
+    mensaje += "Por favor, confirma tu direccion de entrega.";
+
+    const mensajeCodificado = encodeURIComponent(mensaje);
+    const urlWhatsApp = "https://wa.me/" + WHATSAPP_NUMERO + "?text=" + mensajeCodificado;
+    window.open(urlWhatsApp, "_blank");
+
+    setTimeout(async () => {
+      if (confirm("Deseas vaciar el carrito?")) {
+        await limpiarCarrito(false);
+        toggleCarrito();
+      }
+    }, 1000);
+  });
 };
 
 function mostrarNotificacion(mensaje) {

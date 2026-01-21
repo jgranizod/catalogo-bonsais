@@ -17,9 +17,12 @@
         <a href="catalogo.html">Catalogo</a>
         <a href="contacto.html" class="activo">Contacto</a>
       </nav>
-      <button class="carrito-btn" onclick="toggleCarrito()">
-        Carrito <span id="carrito-count" class="carrito-count">0</span>
-      </button>
+      <div class="header-actions">
+        <button id="theme-toggle" class="btn-secundario">Modo oscuro</button>
+        <button class="carrito-btn" onclick="toggleCarrito()">
+          Carrito <span id="carrito-count" class="carrito-count">0</span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -62,7 +65,6 @@
     </div>
   </div>
 
-  <!-- TITULO -->
   <div class="container">
     <h1 class="titulo-seccion">Contacto</h1>
 
@@ -147,5 +149,6 @@
   </script>
 
   <script type="module" src="js/carrito.js"></script>
+  <script src="js/ui.js"></script>
 </body>
 </html>

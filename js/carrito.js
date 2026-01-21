@@ -3,8 +3,15 @@ import { doc, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/f
 
 const WHATSAPP_NUMERO = "593985700805";
 
-// Cola para evitar carreras por clicks rapidos
+// Cola para evitar carreras
 let colaOperaciones = Promise.resolve();
+
+// Cache del carrito en memoria
+let carritoCache = null;
+
+// Bloqueo por producto (evita spam rapido)
+const bloqueados = new Set();
+
 function enCola(tarea) {
   colaOperaciones = colaOperaciones.then(tarea, tarea).catch((e) => {
     console.error("Error en carrito:", e);
@@ -13,11 +20,14 @@ function enCola(tarea) {
 }
 
 function obtenerCarrito() {
+  if (carritoCache) return carritoCache;
   const carrito = localStorage.getItem("carritoServigreen");
-  return carrito ? JSON.parse(carrito) : [];
+  carritoCache = carrito ? JSON.parse(carrito) : [];
+  return carritoCache;
 }
 
 function guardarCarrito(carrito) {
+  carritoCache = carrito;
   localStorage.setItem("carritoServigreen", JSON.stringify(carrito));
   actualizarContador();
 }
@@ -27,15 +37,13 @@ async function ajustarStock(id, delta) {
     await runTransaction(db, async (transaction) => {
       const ref = doc(db, "productos", id);
       const snap = await transaction.get(ref);
-      if (!snap.exists()) {
-        throw new Error("producto-no-encontrado");
-      }
+      if (!snap.exists()) throw new Error("producto-no-encontrado");
+
       const data = snap.data();
       const stockActual = Number(data.stock ?? 0);
       const stockNuevo = stockActual + delta;
-      if (stockNuevo < 0) {
-        throw new Error("stock-insuficiente");
-      }
+      if (stockNuevo < 0) throw new Error("stock-insuficiente");
+
       transaction.update(ref, { stock: stockNuevo });
     });
     return true;
@@ -52,87 +60,110 @@ async function ajustarStock(id, delta) {
 
 window.agregarAlCarrito = function(id, nombre, precio, imagen, stock) {
   return enCola(async () => {
-    let carrito = obtenerCarrito();
-    const productoExistente = carrito.find((item) => item.id === id);
+    if (bloqueados.has(id)) return;
+    bloqueados.add(id);
 
-    const ok = await ajustarStock(id, -1);
-    if (!ok) return;
+    try {
+      const ok = await ajustarStock(id, -1);
+      if (!ok) return;
 
-    if (productoExistente) {
-      productoExistente.cantidad++;
-      productoExistente.stock = Math.max(0, (productoExistente.stock ?? stock ?? 0) - 1);
-    } else {
-      carrito.push({
-        id,
-        nombre,
-        precio: parseFloat(precio),
-        imagen,
-        cantidad: 1,
-        stock: Math.max(0, (stock ?? 0) - 1)
-      });
-    }
+      const carrito = obtenerCarrito();
+      const productoExistente = carrito.find((item) => item.id === id);
 
-    guardarCarrito(carrito);
-    mostrarNotificacion("Producto agregado al carrito");
+      if (productoExistente) {
+        productoExistente.cantidad++;
+      } else {
+        carrito.push({
+          id,
+          nombre,
+          precio: parseFloat(precio),
+          imagen,
+          cantidad: 1
+        });
+      }
 
-    const sidebar = document.getElementById("carrito-sidebar");
-    if (sidebar && sidebar.classList.contains("abierto")) {
-      renderizarCarrito();
+      guardarCarrito(carrito);
+      mostrarNotificacion("Producto agregado al carrito");
+
+      const sidebar = document.getElementById("carrito-sidebar");
+      if (sidebar && sidebar.classList.contains("abierto")) {
+        renderizarCarrito();
+      }
+    } finally {
+      bloqueados.delete(id);
     }
   });
 };
 
 window.aumentarCantidad = function(id) {
   return enCola(async () => {
-    const carrito = obtenerCarrito();
-    const producto = carrito.find((item) => item.id === id);
-    if (!producto) return;
+    if (bloqueados.has(id)) return;
+    bloqueados.add(id);
 
-    const ok = await ajustarStock(id, -1);
-    if (!ok) return;
+    try {
+      const ok = await ajustarStock(id, -1);
+      if (!ok) return;
 
-    producto.cantidad++;
-    producto.stock = Math.max(0, (producto.stock ?? 0) - 1);
+      const carrito = obtenerCarrito();
+      const producto = carrito.find((item) => item.id === id);
+      if (!producto) return;
 
-    guardarCarrito(carrito);
-    renderizarCarrito();
+      producto.cantidad++;
+      guardarCarrito(carrito);
+      renderizarCarrito();
+    } finally {
+      bloqueados.delete(id);
+    }
   });
 };
 
 window.disminuirCantidad = function(id) {
   return enCola(async () => {
-    let carrito = obtenerCarrito();
-    const producto = carrito.find((item) => item.id === id);
-    if (!producto) return;
+    if (bloqueados.has(id)) return;
+    bloqueados.add(id);
 
-    const ok = await ajustarStock(id, 1);
-    if (!ok) return;
+    try {
+      const ok = await ajustarStock(id, 1);
+      if (!ok) return;
 
-    if (producto.cantidad > 1) {
-      producto.cantidad--;
-      producto.stock = (producto.stock ?? 0) + 1;
-    } else {
-      carrito = carrito.filter((item) => item.id !== id);
+      let carrito = obtenerCarrito();
+      const producto = carrito.find((item) => item.id === id);
+      if (!producto) return;
+
+      if (producto.cantidad > 1) {
+        producto.cantidad--;
+      } else {
+        carrito = carrito.filter((item) => item.id !== id);
+      }
+
+      guardarCarrito(carrito);
+      renderizarCarrito();
+    } finally {
+      bloqueados.delete(id);
     }
-
-    guardarCarrito(carrito);
-    renderizarCarrito();
   });
 };
 
 window.eliminarDelCarrito = function(id) {
   return enCola(async () => {
-    let carrito = obtenerCarrito();
-    const producto = carrito.find((item) => item.id === id);
-    if (!producto) return;
+    if (bloqueados.has(id)) return;
+    bloqueados.add(id);
 
-    const ok = await ajustarStock(id, producto.cantidad);
-    if (!ok) return;
+    try {
+      const carrito = obtenerCarrito();
+      const producto = carrito.find((item) => item.id === id);
+      if (!producto) return;
 
-    carrito = carrito.filter((item) => item.id !== id);
-    guardarCarrito(carrito);
-    renderizarCarrito();
-    mostrarNotificacion("Producto eliminado");
+      const ok = await ajustarStock(id, producto.cantidad);
+      if (!ok) return;
+
+      const nuevo = carrito.filter((item) => item.id !== id);
+      guardarCarrito(nuevo);
+      renderizarCarrito();
+      mostrarNotificacion("Producto eliminado");
+    } finally {
+      bloqueados.delete(id);
+    }
   });
 };
 
@@ -146,6 +177,7 @@ async function limpiarCarrito(restaurarStock) {
     }
   }
 
+  carritoCache = [];
   localStorage.removeItem("carritoServigreen");
   actualizarContador();
   renderizarCarrito();
@@ -157,9 +189,7 @@ window.vaciarCarrito = function() {
     if (!confirm("Estas seguro de vaciar el carrito?")) return;
 
     const ok = await limpiarCarrito(true);
-    if (ok) {
-      mostrarNotificacion("Carrito vaciado");
-    }
+    if (ok) mostrarNotificacion("Carrito vaciado");
   });
 };
 
@@ -182,7 +212,6 @@ function renderizarCarrito() {
   const carrito = obtenerCarrito();
   const contenedor = document.getElementById("carrito-items");
   const footer = document.getElementById("carrito-footer");
-
   if (!contenedor || !footer) return;
 
   if (carrito.length === 0) {
@@ -198,7 +227,6 @@ function renderizarCarrito() {
   }
 
   contenedor.innerHTML = "";
-
   carrito.forEach((item) => {
     const itemDiv = document.createElement("div");
     itemDiv.className = "carrito-item";
@@ -229,23 +257,18 @@ function renderizarCarrito() {
 window.toggleCarrito = function() {
   const sidebar = document.getElementById("carrito-sidebar");
   const overlay = document.getElementById("carrito-overlay");
-
   if (!sidebar || !overlay) return;
 
   sidebar.classList.toggle("abierto");
   overlay.classList.toggle("activo");
   document.body.style.overflow = sidebar.classList.contains("abierto") ? "hidden" : "";
 
-  if (sidebar.classList.contains("abierto")) {
-    renderizarCarrito();
-  }
+  if (sidebar.classList.contains("abierto")) renderizarCarrito();
 };
 
 document.addEventListener("DOMContentLoaded", () => {
   const overlay = document.getElementById("carrito-overlay");
-  if (overlay) {
-    overlay.addEventListener("click", toggleCarrito);
-  }
+  if (overlay) overlay.addEventListener("click", toggleCarrito);
   actualizarContador();
 });
 

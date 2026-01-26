@@ -649,20 +649,6 @@ footer {
   margin: 0;
 }
 
-.carrito-close {
-  background: none;
-  border: none;
-  font-size: 2rem;
-  cursor: pointer;
-  color: var(--text-2);
-  line-height: 1;
-  transition: color 0.3s;
-}
-
-.carrito-close:hover {
-  color: var(--text);
-}
-
 #carrito-items {
   flex: 1;
   overflow-y: auto;
@@ -679,21 +665,6 @@ footer {
   font-size: 2rem;
   margin-bottom: 20px;
   opacity: 0.3;
-}
-
-.btn-seguir-comprando {
-  display: inline-block;
-  background: var(--accent);
-  color: var(--surface);
-  text-decoration: none;
-  padding: 12px 30px;
-  border-radius: 5px;
-  font-weight: 600;
-  transition: background 0.3s;
-}
-
-.btn-seguir-comprando:hover {
-  background: var(--accent-hover);
 }
 
 .carrito-item {
@@ -740,44 +711,10 @@ footer {
   border-color: var(--accent);
 }
 
-.btn-eliminar {
-  background: none;
-  border: none;
-  font-size: 1.3rem;
-  cursor: pointer;
-  opacity: 0.6;
-}
-
-.btn-eliminar:hover {
-  opacity: 1;
-}
-
 #carrito-footer {
   border-top: 1px solid var(--border);
   padding: 20px;
   background: var(--surface-2);
-}
-
-.btn-vaciar {
-  background: var(--accent);
-  color: var(--surface);
-  border: none;
-  padding: 12px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.btn-checkout {
-  background: var(--accent);
-  color: var(--surface);
-  border: none;
-  padding: 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1.1rem;
-  font-weight: 600;
 }
 
 /* NOTIFICACION */
@@ -820,7 +757,7 @@ footer {
   background: var(--surface-2);
 }
 .modo-oscuro .nav a.activo{
-  background: #2A3A30;         /* activo oscuro */
+  background: #2A3A30;
   color: var(--text);
   border: 1px solid #3B5244;
 }
@@ -858,18 +795,6 @@ footer {
   background: var(--surface-2);
   border-bottom: 1px solid var(--border);
 }
-.modo-oscuro .carrito-close{
-  color: var(--text-2);
-}
-.modo-oscuro .carrito-close:hover{
-  color: var(--text);
-}
-.modo-oscuro .carrito-item-info h4{
-  color: var(--text);
-}
-.modo-oscuro .carrito-item-precio{
-  color: var(--accent);
-}
 .modo-oscuro .btn-cantidad{
   background: var(--surface-2);
   color: var(--text);
@@ -884,16 +809,6 @@ footer {
   background: var(--surface-2);
   border-top: 1px solid var(--border);
 }
-
-/* Importante: el botón eliminar "X" que estaba invisible */
-.btn-eliminar{
-  color: var(--text-2);
-}
-.btn-eliminar:hover{
-  color: var(--text);
-  opacity: 1;
-}
-
 
 /* ====== BOTONES CARRITO: ANIMADOS, LLAMATIVOS Y LIMPIOS ====== */
 .carrito-acciones{
@@ -916,7 +831,7 @@ footer {
   overflow: hidden;
 }
 
-/* Efecto brillo sutil al hover */
+/* Brillo sutil al hover */
 .btn-seguir-comprando::after,
 .btn-vaciar::after,
 .btn-checkout::after{
@@ -938,14 +853,13 @@ footer {
   box-shadow: 0 10px 22px rgba(0,0,0,0.18);
   filter: brightness(1.03);
 }
-
 .btn-seguir-comprando:hover::after,
 .btn-vaciar:hover::after,
 .btn-checkout:hover::after{
   left: 120%;
 }
 
-/* Estilos individuales */
+/* Botones individuales */
 .btn-seguir-comprando{
   background: var(--surface);
   color: var(--accent);
@@ -962,13 +876,13 @@ footer {
   animation: pulseWhatsapp 3.2s ease-in-out infinite;
 }
 
-/* Micro-pulso suave solo para WhatsApp */
+/* Micro‑pulso suave para WhatsApp */
 @keyframes pulseWhatsapp{
   0%, 100% { transform: translateY(0); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
   50% { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(0,0,0,0.18); }
 }
 
-/* Botón X (cerrar carrito) más limpio */
+/* Botón cerrar carrito (X arriba) */
 .carrito-close{
   width: 34px;
   height: 34px;
@@ -986,7 +900,7 @@ footer {
   transform: rotate(8deg);
 }
 
-/* X de eliminar producto más elegante */
+/* X eliminar producto */
 .btn-eliminar{
   width: 28px;
   height: 28px;
@@ -997,6 +911,7 @@ footer {
   place-items: center;
   font-size: 1rem;
   transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease;
+  color: var(--text-2);
 }
 .btn-eliminar:hover{
   background: #ffeaea;

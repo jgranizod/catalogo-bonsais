@@ -151,9 +151,22 @@
       modalDescripcion.textContent = p.descripcion || p.Descripcion || "Sin descripcion.";
       modalPrecio.textContent = "$" + parseFloat(p.Precio || 0).toFixed(2);
       modalStock.textContent = "Stock disponible: " + (p.stock ?? 0);
+      
+      productoActual = p;
+if (btnModalAgregar) {
+  const stock = p.stock ?? 0;
+  btnModalAgregar.disabled = stock <= 0;
+}
+
       modal.classList.add("activo");
       modal.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
+      productoActual = p;
+if (btnModalAgregar) {
+  const stock = p.stock ?? 0;
+  btnModalAgregar.disabled = stock <= 0;
+}
+
     }
 
     function cerrarModal() {
@@ -165,6 +178,22 @@
     document.getElementById("modal-cerrar").addEventListener("click", cerrarModal);
     modal.addEventListener("click", (e) => { if (e.target === modal) cerrarModal(); });
     document.addEventListener("keydown", (e) => { if (e.key === "Escape") cerrarModal(); });
+    if (btnModalAgregar) {
+  btnModalAgregar.addEventListener("click", () => {
+    if (!productoActual) return;
+    const stock = productoActual.stock ?? 0;
+    if (stock <= 0) return;
+    agregarAlCarrito(
+      productoActual.id,
+      productoActual.Nombre || "",
+      productoActual.Precio || 0,
+      productoActual.imagen || "",
+      stock
+    );
+    cerrarModal();
+  });
+}
+
 
     function obtenerFavoritos() {
       const data = localStorage.getItem("favoritos");
@@ -304,6 +333,7 @@ card.innerHTML = `
   <script src="js/ui.js"></script>
 </body>
 </html>
+
 
 
 

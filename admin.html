@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - Servigreen</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <div class="container" style="padding:40px 0;">
+    <h1 class="titulo-seccion">Panel Admin</h1>
+
+    <div id="login-box">
+      <p>Acceso exclusivo para el dueño</p>
+      <button id="btn-google" class="btn-enviar">Entrar con Google</button>
+      <p id="login-msg"></p>
+    </div>
+
+    <div id="admin-panel" style="display:none;">
+      <button id="btn-logout" class="btn-secundario">Cerrar sesión</button>
+      <h2>Pedidos pendientes</h2>
+      <div id="pedidos-list"></div>
+    </div>
+  </div>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

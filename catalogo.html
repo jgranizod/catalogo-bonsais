@@ -235,66 +235,51 @@ if (btnModalAgregar) {
       return copia;
     }
 
-    function mostrarProductos(productos) {
-      const contenedor = document.getElementById("productos");
-      if (productos.length === 0) {
-        contenedor.innerHTML = '<p class="loading">No hay productos en esta categoria</p>';
-        return;
-      }
+function mostrarProductos(productos) {
+  const contenedor = document.getElementById("productos");
+  if (productos.length === 0) {
+    contenedor.innerHTML = '<p class="loading">No hay productos en esta categoria</p>';
+    return;
+  }
 
-      const favoritos = obtenerFavoritos();
-      contenedor.innerHTML = "";
+  contenedor.innerHTML = "";
 
-      productos.forEach((p) => {
-        const card = document.createElement("div");
-        card.className = "producto";
+  productos.forEach((p) => {
+    const card = document.createElement("div");
+    card.className = "producto";
 
-        const stock = p.stock ?? 0;
-        const badge = stock > 0 && stock <= 3 ? '<span class="badge-stock">Ultimas unidades</span>' : "";
-        const nombre = p.Nombre || "";
-        const nombreEscapado = nombre.replace(/'/g, "\\'");
-        const favoritoActivo = favoritos.includes(p.id) ? "favorito activo" : "favorito";
+    const stock = p.stock ?? 0;
+    const badge = stock > 0 && stock <= 3 ? '<span class="badge-stock">Ultimas unidades</span>' : "";
+    const nombre = p.Nombre || "";
+    const nombreEscapado = nombre.replace(/'/g, "\\'");
 
-
-
-card.innerHTML = `
-  <img src="${p.imagen}" alt="${nombre}" class="producto-img" loading="lazy"
-       onerror="this.src='https://via.placeholder.com/280?text=Sin+Imagen'">
-  <div class="producto-info">
-    <span class="categoria-tag">${p.categoria || "General"}</span>
-    ${badge}
-    <button class="${favoritoActivo}" data-id="${p.id}" aria-label="Favorito">
-      ${favoritos.includes(p.id) ? "★" : "☆"}
-    </button>
-    <h3>${nombre}</h3>
-    <div class="precio-container"><span class="precio">$${parseFloat(p.Precio || 0).toFixed(2)}</span></div>
-    <p class="stock">Stock disponible: ${stock}</p>
-    ${
-      stock > 0
-        ? `<button class="btn-carrito" onclick="agregarAlCarrito('${p.id}', '${nombreEscapado}', ${p.Precio || 0}, '${p.imagen}', ${stock})">Anadir al carrito 🧺</button>`
-        : `<button disabled>Agotado</button>`
-    }
-  </div>
-`;
-
-
-        const img = card.querySelector(".producto-img");
-        if (img) img.addEventListener("click", () => abrirModal(p));
-
-        const btnCarrito = card.querySelector(".btn-carrito");
-        if (btnCarrito) btnCarrito.addEventListener("click", (e) => e.stopPropagation());
-
-        const favBtn = card.querySelector(".favorito");
-        if (favBtn) {
-          favBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            toggleFavorito(p.id);
-          });
+    card.innerHTML = `
+      <img src="${p.imagen}" alt="${nombre}" class="producto-img" loading="lazy"
+           onerror="this.src='https://via.placeholder.com/280?text=Sin+Imagen'">
+      <div class="producto-info">
+        <span class="categoria-tag">${p.categoria || "General"}</span>
+        ${badge}
+        <h3>${nombre}</h3>
+        <div class="precio-container"><span class="precio">$${parseFloat(p.Precio || 0).toFixed(2)}</span></div>
+        <p class="stock">Stock disponible: ${stock}</p>
+        ${
+          stock > 0
+            ? `<button class="btn-carrito" onclick="agregarAlCarrito('${p.id}', '${nombreEscapado}', ${p.Precio || 0}, '${p.imagen}', ${stock})">Anadir al carrito 🧺</button>`
+            : `<button disabled>Agotado</button>`
         }
+      </div>
+    `;
 
-        contenedor.appendChild(card);
-      });
-    }
+    const img = card.querySelector(".producto-img");
+    if (img) img.addEventListener("click", () => abrirModal(p));
+
+    const btnCarrito = card.querySelector(".btn-carrito");
+    if (btnCarrito) btnCarrito.addEventListener("click", (e) => e.stopPropagation());
+
+    contenedor.appendChild(card);
+  });
+}
+
 
     function aplicarFiltro() {
       let filtrados = todosLosProductos;
@@ -373,6 +358,7 @@ card.innerHTML = `
   <script src="js/ui.js"></script>
 </body>
 </html>
+
 
 
 

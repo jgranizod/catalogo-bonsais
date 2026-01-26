@@ -255,7 +255,7 @@ if (btnModalAgregar) {
         const nombreEscapado = nombre.replace(/'/g, "\\'");
         const favoritoActivo = favoritos.includes(p.id) ? "favorito activo" : "favorito";
 
-  const favoritoActivo = favoritos.includes(p.id) ? "favorito activo" : "favorito";
+
 
 card.innerHTML = `
   <img src="${p.imagen}" alt="${nombre}" class="producto-img" loading="lazy"
@@ -373,6 +373,7 @@ card.innerHTML = `
   <script src="js/ui.js"></script>
 </body>
 </html>
+
 
 
 

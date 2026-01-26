@@ -53,7 +53,7 @@ function mostrarProductos(productos, contenedorId) {
   });
 }
 
-// Crear tarjeta de producto (solo para catalogo simple)
+// Crear tarjeta de producto
 function crearTarjetaProducto(p) {
   const card = document.createElement("div");
   card.className = "producto";

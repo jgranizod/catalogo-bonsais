@@ -129,6 +129,7 @@
     let textoBusqueda = "";
     let precioMax = 200;
     let ordenActual = "nuevo";
+    let productoActual = null;
 
     const modal = document.getElementById("producto-modal");
     const modalImagen = document.getElementById("modal-imagen");
@@ -137,6 +138,10 @@
     const modalDescripcion = document.getElementById("modal-descripcion");
     const modalPrecio = document.getElementById("modal-precio");
     const modalStock = document.getElementById("modal-stock");
+    const btnModalAgregar = document.getElementById("modal-agregar");
+    const resultCount = document.getElementById("result-count");
+    const btnLimpiar = document.getElementById("limpiar-filtros");
+
 
     function abrirModal(p) {
       modalImagen.src = p.imagen || "";
@@ -299,6 +304,7 @@ card.innerHTML = `
   <script src="js/ui.js"></script>
 </body>
 </html>
+
 
 
 

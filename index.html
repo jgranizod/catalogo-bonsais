@@ -8,7 +8,6 @@
 </head>
 <body>
 
-  <!-- NAVEGACION -->
   <header class="header">
     <div class="container">
       <div class="logo">Servigreen</div>
@@ -18,46 +17,32 @@
         <a href="contacto.html">Contacto</a>
       </nav>
       <div class="header-actions">
-        <button id="theme-toggle" class="btn-secundario">Modo oscuro</button>
+        <button id="theme-toggle" class="btn-secundario">Modo oscuro 🌙</button>
         <button class="carrito-btn" onclick="toggleCarrito()">
-          Carrito <span id="carrito-count" class="carrito-count">0</span>
+          Carrito 🛒 <span id="carrito-count" class="carrito-count">0</span>
         </button>
       </div>
     </div>
   </header>
- 
 
-  <!-- CARRITO SIDEBAR -->
+  <!-- Carrito -->
   <div id="carrito-overlay"></div>
   <div id="carrito-sidebar">
     <div class="carrito-header">
       <h2>Tu Carrito</h2>
       <button class="carrito-close" onclick="toggleCarrito()">&times;</button>
     </div>
-
     <div id="carrito-items"></div>
-
-    <div id="carrito-footer" style="display: none;">
+    <div id="carrito-footer" style="display:none;">
       <div class="carrito-resumen">
-        <div class="carrito-resumen-linea">
-          <span>Subtotal</span>
-          <span id="carrito-subtotal">$0.00</span>
-        </div>
-        <div class="carrito-resumen-linea">
-          <span>Envio</span>
-          <span id="carrito-envio">$0.00</span>
-        </div>
-        <div class="carrito-resumen-linea">
-          <span>Impuestos</span>
-          <span id="carrito-impuestos">$0.00</span>
-        </div>
+        <div class="carrito-resumen-linea"><span>Subtotal</span><span id="carrito-subtotal">$0.00</span></div>
+        <div class="carrito-resumen-linea"><span>Envio</span><span id="carrito-envio">$0.00</span></div>
+        <div class="carrito-resumen-linea"><span>Impuestos</span><span id="carrito-impuestos">$0.00</span></div>
       </div>
-
       <div class="carrito-total-container">
         <span class="carrito-total-label">Total:</span>
         <span id="carrito-total">$0.00</span>
       </div>
-
       <div class="carrito-acciones">
         <button onclick="toggleCarrito()" class="btn-seguir-comprando">Continuar comprando</button>
         <button onclick="vaciarCarrito()" class="btn-vaciar">Vaciar Carrito</button>
@@ -66,15 +51,13 @@
     </div>
   </div>
 
-  <!-- HERO -->
   <section class="hero">
-    <h1>Naturaleza en casa</h1>
+    <h1>Naturaleza en casa 🌿</h1>
     <p>Servigreen mejora tu salud creando sombras naturales y refugios de bienestar emocional.</p>
   </section>
 
-  <!-- DESTACADOS -->
   <section class="container">
-    <h2 class="titulo-seccion">Productos Destacados</h2>
+    <h2 class="titulo-seccion">Productos Destacados 🌱</h2>
     <div id="destacados" class="grid">
       <div class="producto skeleton-card"></div>
       <div class="producto skeleton-card"></div>
@@ -82,32 +65,11 @@
       <div class="producto skeleton-card"></div>
     </div>
     <div class="centrar">
-      <a href="catalogo.html" class="btn-ver-mas">Ver Catalogo Completo</a>
+      <a href="catalogo.html" class="btn-ver-mas">Ver Catalogo Completo ✨</a>
     </div>
   </section>
 
-  <!-- FAQ -->
-  <section class="faq">
-    <div class="container">
-      <h2 class="titulo-seccion">Preguntas Frecuentes</h2>
-      <div class="faq-grid">
-        <div class="faq-card">
-          <h3>Cuanto tarda el envio?</h3>
-          <p>Entre 24 y 72 horas en ciudad.</p>
-        </div>
-        <div class="faq-card">
-          <h3>Como cuido mi bonsai?</h3>
-          <p>Incluimos instrucciones y asesoramiento.</p>
-        </div>
-        <div class="faq-card">
-          <h3>Puedo cambiar un producto?</h3>
-          <p>Si, dentro de 7 dias.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- MODAL PRODUCTO -->
+  <!-- Modal -->
   <div id="producto-modal" class="modal-overlay" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <button id="modal-cerrar" class="modal-close" type="button" aria-label="Cerrar">&times;</button>
@@ -180,22 +142,18 @@
 
             const card = document.createElement("div");
             card.className = "producto";
-
             card.innerHTML = `
               <img src="${p.imagen}" alt="${p.Nombre}" class="producto-img">
               <div class="producto-info">
                 <span class="categoria-tag">${p.categoria || "General"}</span>
                 ${badge}
                 <h3>${p.Nombre}</h3>
-                <div class="precio-container">
-                  <span class="precio">$${parseFloat(p.Precio || 0).toFixed(2)}</span>
-                </div>
+                <div class="precio-container"><span class="precio">$${parseFloat(p.Precio || 0).toFixed(2)}</span></div>
                 <p class="stock">Stock: ${stock}</p>
-                <button class="btn-detalles">Ver Detalles</button>
+                <button class="btn-detalles">Ver Detalles 👀</button>
               </div>
             `;
 
-            card.addEventListener("click", () => abrirModal(p));
             const btnDetalles = card.querySelector(".btn-detalles");
             btnDetalles.addEventListener("click", (e) => {
               e.stopPropagation();
@@ -210,7 +168,7 @@
         if (count === 0) {
           contenedor.innerHTML = '<p class="loading">No hay productos disponibles</p>';
         }
-      } catch (error) {
+      } catch {
         contenedor.innerHTML = '<p class="loading">Error al cargar productos</p>';
       }
     }
@@ -220,7 +178,5 @@
 
   <script type="module" src="js/carrito.js"></script>
   <script src="js/ui.js"></script>
-
-
 </body>
 </html>

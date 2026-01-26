@@ -5,7 +5,7 @@
   if (stored === "dark") body.classList.add("modo-oscuro");
 
   function actualizarTexto(btn) {
-    btn.textContent = body.classList.contains("modo-oscuro") ? "Modo claro" : "Modo oscuro";
+    btn.textContent = body.classList.contains("modo-oscuro") ? "Modo claro 🌞" : "Modo oscuro 🌙";
   }
 
   function crearBoton() {

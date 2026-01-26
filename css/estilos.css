@@ -876,3 +876,110 @@ body.dark .modal-contenido *,
 body.dark .modal-content *{
   color: inherit !important;
 }
+
+
+
+/* ====== CARRITO: estilo limpio (CLARO + OSCURO) ====== */
+
+/* Panel */
+#carritoPanel, .carrito-panel, .carrito {
+  background: var(--surface);
+  color: var(--text);
+  border-left: 1px solid var(--border);
+}
+
+/* Header carrito */
+#carritoPanel h2, .carrito-panel h2, .carrito h2{
+  color: var(--text);
+}
+
+/* Items */
+#carritoPanel .item, .carrito-item{
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  background: transparent;
+}
+
+#carritoPanel img, .carrito-item img{
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* Textos */
+#carritoPanel .nombre, .carrito-item .nombre{
+  color: var(--text);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+#carritoPanel .precio, .carrito-item .precio{
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Botón X (eliminar) */
+#carritoPanel .eliminar, .carrito-item .eliminar, #carritoPanel .remove{
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  font-size: 18px;
+  cursor: pointer;
+}
+#carritoPanel .eliminar:hover, .carrito-item .eliminar:hover, #carritoPanel .remove:hover{
+  color: var(--text);
+}
+
+/* Controles + / - */
+#carritoPanel .qty, .carrito-item .qty{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#carritoPanel .qty button, .carrito-item .qty button{
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+#carritoPanel .qty span, .carrito-item .qty span{
+  min-width: 18px;
+  text-align: center;
+  color: var(--text);
+}
+
+/* Totales */
+#carritoPanel .resumen, .carrito-resumen{
+  padding: 14px;
+  color: var(--text-2);
+  border-top: 1px solid var(--border);
+}
+
+#carritoPanel .resumen strong, .carrito-resumen strong{
+  color: var(--text);
+}
+
+/* Botones del carrito */
+#carritoPanel .acciones button, .carrito-acciones button{
+  width: 100%;
+  margin-top: 10px;
+  background: var(--accent);
+  color: var(--bg);
+  border: 0;
+  border-radius: 10px;
+  padding: 12px;
+  font-weight: 700;
+}
+
+#carritoPanel .acciones button:hover, .carrito-acciones button:hover{
+  background: var(--accent-2);
+}

@@ -22,6 +22,7 @@ function enCooldown(id) {
   ultimoClick.set(id, ahora);
   return false;
 }
+
 function obtenerCarrito() {
   return carritoCache;
 }
@@ -39,13 +40,6 @@ async function limpiarCarrito() {
   window.dispatchEvent(new CustomEvent("carrito:actualizado"));
   return true;
 }
-
-
-function guardarCarrito(carrito) {
-  carritoCache = carrito;
-  actualizarContador();
-}
-
 
 async function ajustarStock(id, delta) {
   try {
@@ -72,6 +66,7 @@ async function ajustarStock(id, delta) {
     return false;
   }
 }
+
 window.agregarAlCarrito = function(id, nombre, precio, imagen, stock) {
   return enCola(async () => {
     if (enCooldown(id)) {
@@ -111,7 +106,6 @@ window.agregarAlCarrito = function(id, nombre, precio, imagen, stock) {
   });
 };
 
-
 window.aumentarCantidad = function(id) {
   return enCola(async () => {
     if (enCooldown(id)) {
@@ -139,7 +133,6 @@ window.aumentarCantidad = function(id) {
     }
   });
 };
-
 
 window.disminuirCantidad = function(id) {
   return enCola(async () => {
@@ -182,21 +175,11 @@ window.eliminarDelCarrito = function(id) {
   });
 };
 
-
-async function limpiarCarrito() {
-  carritoCache = [];
-  actualizarContador();
-  renderizarCarrito();
-  return true;
-}
-
-
 window.vaciarCarrito = function() {
   return enCola(async () => {
     if (!confirm("¿Estas seguro de vaciar el carrito?")) return;
-
-    const ok = await limpiarCarrito(true);
-    if (ok) mostrarNotificacion("Carrito vaciado");
+    await limpiarCarrito();
+    mostrarNotificacion("Carrito vaciado");
   });
 };
 
@@ -267,10 +250,10 @@ function renderizarCarrito() {
   document.getElementById("carrito-total").textContent = "$" + total.toFixed(2);
 
   footer.style.display = "block";
-  const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
-const itemsEl = document.getElementById("carrito-items-count");
-if (itemsEl) itemsEl.textContent = totalItems;
 
+  const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+  const itemsEl = document.getElementById("carrito-items-count");
+  if (itemsEl) itemsEl.textContent = totalItems;
 }
 
 window.toggleCarrito = function() {
@@ -298,14 +281,14 @@ window.checkoutWhatsApp = function() {
       alert("El carrito esta vacio");
       return;
     }
-    for (const item of carrito) {
-  const ok = await ajustarStock(item.id, -item.cantidad);
-  if (!ok) {
-    alert("No hay stock suficiente para completar el pedido.");
-    return;
-  }
-}
 
+    for (const item of carrito) {
+      const ok = await ajustarStock(item.id, -item.cantidad);
+      if (!ok) {
+        alert("No hay stock suficiente para completar el pedido.");
+        return;
+      }
+    }
 
     let mensaje = "*NUEVO PEDIDO - SERVIGREEN*\\n\\n";
     mensaje += "*PRODUCTOS:*\\n";
@@ -331,12 +314,8 @@ window.checkoutWhatsApp = function() {
     const urlWhatsApp = "https://wa.me/" + WHATSAPP_NUMERO + "?text=" + mensajeCodificado;
     window.open(urlWhatsApp, "_blank");
 
-    setTimeout(async () => {
-      if (confirm("¿Deseas vaciar el carrito?")) {
-        await limpiarCarrito(false);
-        toggleCarrito();
-      }
-    }, 1000);
+    await limpiarCarrito();
+    toggleCarrito();
   });
 };
 
@@ -355,5 +334,5 @@ function mostrarNotificacion(mensaje) {
     setTimeout(() => notif.remove(), 300);
   }, 2500);
 }
-window.obtenerCarrito = obtenerCarrito;
 
+window.obtenerCarrito = obtenerCarrito;

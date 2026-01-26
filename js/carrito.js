@@ -2,17 +2,9 @@ import { db } from "./firebase.js";
 import { doc, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const WHATSAPP_NUMERO = "593985700805";
-
-// Cola para evitar carreras
 let colaOperaciones = Promise.resolve();
-
-// Cache del carrito en memoria
 let carritoCache = null;
-
-// Bloqueo por producto
 const bloqueados = new Set();
-
-// Cooldown por producto
 const COOLDOWN_MS = 3000;
 const ultimoClick = new Map();
 
@@ -26,9 +18,7 @@ function enCola(tarea) {
 function enCooldown(id) {
   const ahora = Date.now();
   const ultimo = ultimoClick.get(id) || 0;
-  if (ahora - ultimo < COOLDOWN_MS) {
-    return true;
-  }
+  if (ahora - ultimo < COOLDOWN_MS) return true;
   ultimoClick.set(id, ahora);
   return false;
 }
@@ -63,7 +53,7 @@ async function ajustarStock(id, delta) {
     return true;
   } catch (error) {
     if (error.message === "stock-insuficiente") {
-      alert("No hay más stock disponible");
+      alert("No hay mas stock disponible");
       return false;
     }
     console.error("Error al actualizar stock:", error);
@@ -91,22 +81,14 @@ window.agregarAlCarrito = function(id, nombre, precio, imagen, stock) {
       if (productoExistente) {
         productoExistente.cantidad++;
       } else {
-        carrito.push({
-          id,
-          nombre,
-          precio: parseFloat(precio),
-          imagen,
-          cantidad: 1
-        });
+        carrito.push({ id, nombre, precio: parseFloat(precio), imagen, cantidad: 1 });
       }
 
       guardarCarrito(carrito);
       mostrarNotificacion("Producto agregado al carrito");
 
       const sidebar = document.getElementById("carrito-sidebar");
-      if (sidebar && sidebar.classList.contains("abierto")) {
-        renderizarCarrito();
-      }
+      if (sidebar && sidebar.classList.contains("abierto")) renderizarCarrito();
     } finally {
       bloqueados.delete(id);
     }
@@ -208,7 +190,7 @@ async function limpiarCarrito(restaurarStock) {
 
 window.vaciarCarrito = function() {
   return enCola(async () => {
-    if (!confirm("¿Estás seguro de vaciar el carrito?")) return;
+    if (!confirm("¿Estas seguro de vaciar el carrito?")) return;
 
     const ok = await limpiarCarrito(true);
     if (ok) mostrarNotificacion("Carrito vaciado");
@@ -240,8 +222,8 @@ function renderizarCarrito() {
     contenedor.innerHTML = `
       <div class="carrito-vacio">
         <div class="carrito-vacio-icon">Carrito</div>
-        <p>Tu carrito está vacío</p>
-        <a href="catalogo.html" class="btn-seguir-comprando">Ver Catálogo</a>
+        <p>Tu carrito esta vacio</p>
+        <a href="catalogo.html" class="btn-seguir-comprando">Ver Catalogo</a>
       </div>
     `;
     footer.style.display = "none";
@@ -306,7 +288,7 @@ window.checkoutWhatsApp = function() {
   return enCola(async () => {
     const carrito = obtenerCarrito();
     if (carrito.length === 0) {
-      alert("El carrito está vacío");
+      alert("El carrito esta vacio");
       return;
     }
 
@@ -328,7 +310,7 @@ window.checkoutWhatsApp = function() {
 
     mensaje += "------------------------------\\n";
     mensaje += "*TOTAL: $" + total.toFixed(2) + "*\\n\\n";
-    mensaje += "Por favor, confirma tu dirección de entrega.";
+    mensaje += "Por favor, confirma tu direccion de entrega.";
 
     const mensajeCodificado = encodeURIComponent(mensaje);
     const urlWhatsApp = "https://wa.me/" + WHATSAPP_NUMERO + "?text=" + mensajeCodificado;

@@ -808,3 +808,71 @@ footer {
   .contacto-contenido { grid-template-columns: 1fr; gap: 40px; }
   .grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
 }
+
+
+/* ====== FIX LEGIBILIDAD (PEGAR AL FINAL) ====== */
+
+/* 1) NAV: quita el cuadro claro y fuerza contraste */
+body.dark nav a,
+body.dark .nav a{
+  color: #E6F2EA !important;
+  background: transparent !important;
+}
+
+body.dark nav a:hover,
+body.dark .nav a:hover{
+  background: #1C2B22 !important;
+}
+
+body.dark nav a.active,
+body.dark .nav a.active,
+body.dark nav a[aria-current="page"]{
+  background: #2A3A30 !important;  /* activo oscuro */
+  color: #E6F2EA !important;
+  border: 1px solid #3B5244 !important;
+}
+
+/* 2) PRODUCTOS: fuerza texto claro dentro de cards (tu problema principal) */
+body.dark .producto,
+body.dark .card,
+body.dark .producto-card{
+  background: #16241C !important;
+  border: 1px solid #2A3A30 !important;
+  color: #E6F2EA !important;
+}
+
+body.dark .producto *,
+body.dark .card *,
+body.dark .producto-card *{
+  color: inherit !important;
+  opacity: 1 !important;           /* por si algún texto está en 0.3/0.5 */
+  filter: none !important;          /* por si aplicaste brightness/contrast */
+}
+
+body.dark .producto .precio,
+body.dark .card .precio{
+  color: #4CAF50 !important;
+  font-weight: 700 !important;
+}
+
+body.dark .producto .stock,
+body.dark .card .stock{
+  color: #B7D1C2 !important;
+}
+
+/* 3) MODAL: en oscuro que no quede blanco “inmutable” y que el texto se lea */
+body.dark .modal{
+  background: rgba(0,0,0,.65) !important;
+}
+
+body.dark .modal-contenido,
+body.dark .modal-content{
+  background: #16241C !important;
+  color: #E6F2EA !important;
+  border: 1px solid #2A3A30 !important;
+}
+
+body.dark .modal-contenido *,
+body.dark .modal-content *{
+  color: inherit !important;
+}

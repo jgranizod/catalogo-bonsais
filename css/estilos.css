@@ -941,3 +941,43 @@ footer {
   .carrito-acciones{ grid-template-columns: 1fr; }
   .btn-checkout{ animation: none; }
 }
+
+/* ====== EXTRAS PREMIUM (HTML nuevo) ====== */
+.logo-wrap{display:flex;flex-direction:column;line-height:1;}
+.logo-sub{font-size:0.75rem;color:var(--text-3);font-weight:500;}
+
+.resultados-bar{
+  display:flex;justify-content:space-between;align-items:center;
+  margin:12px 0 18px;gap:10px;flex-wrap:wrap;
+}
+.btn-limpiar{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.producto{position:relative;}
+.favorito{
+  position:absolute;top:12px;right:12px;
+  width:34px;height:34px;border-radius:50%;
+  display:grid;place-items:center;font-size:1rem;
+  border:1px solid var(--border);background:var(--surface);
+  box-shadow: var(--shadow-1);
+}
+.favorito.activo{background:#ffe08a;}
+
+.modal-acciones{display:flex;gap:10px;margin-top:10px;}
+.btn-modal{
+  width:100%;
+  background: var(--accent);
+  color: var(--surface);
+  border:none;
+  padding:12px;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+}
+.btn-modal:disabled{background:#ccc;cursor:not-allowed;}

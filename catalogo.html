@@ -231,7 +231,7 @@ card.innerHTML = `
         const img = card.querySelector(".producto-img");
         if (img) img.addEventListener("click", () => abrirModal(p));
 
-        const btnCarrito = card.querySelector("button");
+        const btnCarrito = card.querySelector(".btn-carrito");
         if (btnCarrito) btnCarrito.addEventListener("click", (e) => e.stopPropagation());
 
         const favBtn = card.querySelector(".favorito");
@@ -299,6 +299,7 @@ card.innerHTML = `
   <script src="js/ui.js"></script>
 </body>
 </html>
+
 
 
 

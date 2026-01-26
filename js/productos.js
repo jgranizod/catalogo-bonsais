@@ -20,6 +20,7 @@ async function cargarProductos() {
   }
 }
 
+// Mostrar productos destacados (primeros 4)
 function mostrarDestacados() {
   const contenedor = document.getElementById("destacados");
   if (!contenedor) return;
@@ -36,6 +37,7 @@ function mostrarDestacados() {
   });
 }
 
+// Mostrar productos en contenedor
 function mostrarProductos(productos, contenedorId) {
   const contenedor = document.getElementById(contenedorId);
   if (!contenedor) return;
@@ -51,6 +53,7 @@ function mostrarProductos(productos, contenedorId) {
   });
 }
 
+// Crear tarjeta de producto (solo para catalogo simple)
 function crearTarjetaProducto(p) {
   const card = document.createElement("div");
   card.className = "producto";

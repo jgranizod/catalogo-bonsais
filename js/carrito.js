@@ -264,6 +264,10 @@ function renderizarCarrito() {
   document.getElementById("carrito-total").textContent = "$" + total.toFixed(2);
 
   footer.style.display = "block";
+  const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+const itemsEl = document.getElementById("carrito-items-count");
+if (itemsEl) itemsEl.textContent = totalItems;
+
 }
 
 window.toggleCarrito = function() {

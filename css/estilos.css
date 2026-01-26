@@ -893,3 +893,129 @@ footer {
   color: var(--text);
   opacity: 1;
 }
+
+
+/* ====== BOTONES CARRITO: ANIMADOS, LLAMATIVOS Y LIMPIOS ====== */
+.carrito-acciones{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.btn-seguir-comprando,
+.btn-vaciar,
+.btn-checkout{
+  position: relative;
+  border-radius: 12px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  overflow: hidden;
+}
+
+/* Efecto brillo sutil al hover */
+.btn-seguir-comprando::after,
+.btn-vaciar::after,
+.btn-checkout::after{
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -70%;
+  width: 60%;
+  height: 200%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.25), transparent);
+  transform: rotate(25deg);
+  transition: left 0.6s ease;
+}
+
+.btn-seguir-comprando:hover,
+.btn-vaciar:hover,
+.btn-checkout:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+  filter: brightness(1.03);
+}
+
+.btn-seguir-comprando:hover::after,
+.btn-vaciar:hover::after,
+.btn-checkout:hover::after{
+  left: 120%;
+}
+
+/* Estilos individuales */
+.btn-seguir-comprando{
+  background: var(--surface);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+.btn-vaciar{
+  background: #e74c3c;
+}
+
+.btn-checkout{
+  grid-column: 1 / -1;
+  background: var(--accent);
+  animation: pulseWhatsapp 3.2s ease-in-out infinite;
+}
+
+/* Micro-pulso suave solo para WhatsApp */
+@keyframes pulseWhatsapp{
+  0%, 100% { transform: translateY(0); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+  50% { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(0,0,0,0.18); }
+}
+
+/* Botón X (cerrar carrito) más limpio */
+.carrito-close{
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  display: grid;
+  place-items: center;
+  font-size: 1.3rem;
+  line-height: 1;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.carrito-close:hover{
+  background: var(--surface-2);
+  transform: rotate(8deg);
+}
+
+/* X de eliminar producto más elegante */
+.btn-eliminar{
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  display: grid;
+  place-items: center;
+  font-size: 1rem;
+  transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease;
+}
+.btn-eliminar:hover{
+  background: #ffeaea;
+  border-color: #e74c3c;
+  color: #e74c3c;
+  transform: scale(1.05);
+}
+
+/* Alinea precio y X */
+.carrito-item-acciones{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+/* Responsive */
+@media (max-width: 520px){
+  .carrito-acciones{
+    grid-template-columns: 1fr;
+  }
+}

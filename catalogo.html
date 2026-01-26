@@ -194,6 +194,22 @@ if (btnModalAgregar) {
   });
 }
 
+    if (btnModalAgregar) {
+  btnModalAgregar.addEventListener("click", () => {
+    if (!productoActual) return;
+    const stock = productoActual.stock ?? 0;
+    if (stock <= 0) return;
+    agregarAlCarrito(
+      productoActual.id,
+      productoActual.Nombre || "",
+      productoActual.Precio || 0,
+      productoActual.imagen || "",
+      stock
+    );
+    cerrarModal();
+  });
+}
+
 
     function obtenerFavoritos() {
       const data = localStorage.getItem("favoritos");
@@ -287,6 +303,11 @@ card.innerHTML = `
       filtrados = filtrados.filter((p) => (p.Precio || 0) <= precioMax);
       filtrados = ordenarProductos(filtrados);
       mostrarProductos(filtrados);
+    if (resultCount) {
+  const n = filtrados.length;
+  resultCount.textContent = n === 1 ? "1 producto" : `${n} productos`;
+}
+
     }
 
     window.filtrar = function(categoria) {
@@ -313,6 +334,25 @@ card.innerHTML = `
       ordenActual = e.target.value;
       aplicarFiltro();
     });
+    if (btnLimpiar) {
+  btnLimpiar.addEventListener("click", () => {
+    categoriaActual = "todos";
+    textoBusqueda = "";
+    precioMax = 200;
+    ordenActual = "nuevo";
+
+    document.getElementById("buscador").value = "";
+    document.getElementById("precio-max").value = 200;
+    document.getElementById("precio-max-label").textContent = "$200";
+    document.getElementById("ordenar").value = "nuevo";
+
+    document.querySelectorAll(".filtro-btn").forEach((btn) => btn.classList.remove("activo"));
+    document.querySelector(".filtro-btn").classList.add("activo");
+
+    aplicarFiltro();
+  });
+}
+
 
     function cargarProductos() {
       const contenedor = document.getElementById("productos");
@@ -333,6 +373,7 @@ card.innerHTML = `
   <script src="js/ui.js"></script>
 </body>
 </html>
+
 
 
 

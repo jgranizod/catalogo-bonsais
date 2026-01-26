@@ -8,7 +8,6 @@
 </head>
 <body>
 
-  <!-- NAVEGACION -->
   <header class="header">
     <div class="container">
       <div class="logo">Servigreen</div>
@@ -18,27 +17,24 @@
         <a href="contacto.html">Contacto</a>
       </nav>
       <div class="header-actions">
-        <button id="theme-toggle" class="btn-secundario">Modo oscuro</button>
+        <button id="theme-toggle" class="btn-secundario">Modo oscuro 🌙</button>
         <button class="carrito-btn" onclick="toggleCarrito()">
-          Carrito <span id="carrito-count" class="carrito-count">0</span>
+          Carrito 🛒 <span id="carrito-count" class="carrito-count">0</span>
         </button>
       </div>
     </div>
   </header>
 
   <div class="container">
-    <h1 class="titulo-seccion">Catalogo de Productos</h1>
+    <h1 class="titulo-seccion">Catalogo de Productos 🌱</h1>
 
-    <!-- BUSCADOR + FILTROS -->
     <div class="filtros filtros-avanzados">
       <input id="buscador" type="text" placeholder="Buscar por nombre" class="input-busqueda">
-
       <div class="filtro-precio">
         <label>Precio max:</label>
         <input id="precio-max" type="range" min="0" max="200" value="200">
         <span id="precio-max-label">$200</span>
       </div>
-
       <select id="ordenar" class="select-orden">
         <option value="nuevo">Ordenar: Nuevo</option>
         <option value="precio-asc">Precio: Menor a mayor</option>
@@ -47,7 +43,6 @@
       </select>
     </div>
 
-    <!-- FILTROS CATEGORIA -->
     <div class="filtros">
       <button class="filtro-btn activo" onclick="filtrar('todos')">Todos</button>
       <button class="filtro-btn" onclick="filtrar('bonsai')">Bonsais</button>
@@ -64,37 +59,24 @@
     </div>
   </div>
 
-  <!-- CARRITO SIDEBAR -->
+  <!-- Carrito -->
   <div id="carrito-overlay"></div>
   <div id="carrito-sidebar">
     <div class="carrito-header">
       <h2>Tu Carrito</h2>
       <button class="carrito-close" onclick="toggleCarrito()">&times;</button>
     </div>
-
     <div id="carrito-items"></div>
-
-    <div id="carrito-footer" style="display: none;">
+    <div id="carrito-footer" style="display:none;">
       <div class="carrito-resumen">
-        <div class="carrito-resumen-linea">
-          <span>Subtotal</span>
-          <span id="carrito-subtotal">$0.00</span>
-        </div>
-        <div class="carrito-resumen-linea">
-          <span>Envio</span>
-          <span id="carrito-envio">$0.00</span>
-        </div>
-        <div class="carrito-resumen-linea">
-          <span>Impuestos</span>
-          <span id="carrito-impuestos">$0.00</span>
-        </div>
+        <div class="carrito-resumen-linea"><span>Subtotal</span><span id="carrito-subtotal">$0.00</span></div>
+        <div class="carrito-resumen-linea"><span>Envio</span><span id="carrito-envio">$0.00</span></div>
+        <div class="carrito-resumen-linea"><span>Impuestos</span><span id="carrito-impuestos">$0.00</span></div>
       </div>
-
       <div class="carrito-total-container">
         <span class="carrito-total-label">Total:</span>
         <span id="carrito-total">$0.00</span>
       </div>
-
       <div class="carrito-acciones">
         <button onclick="toggleCarrito()" class="btn-seguir-comprando">Continuar comprando</button>
         <button onclick="vaciarCarrito()" class="btn-vaciar">Vaciar Carrito</button>
@@ -103,7 +85,7 @@
     </div>
   </div>
 
-  <!-- MODAL PRODUCTO -->
+  <!-- Modal -->
   <div id="producto-modal" class="modal-overlay" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <button id="modal-cerrar" class="modal-close" type="button" aria-label="Cerrar">&times;</button>
@@ -171,11 +153,9 @@
       const data = localStorage.getItem("favoritos");
       return data ? JSON.parse(data) : [];
     }
-
     function guardarFavoritos(lista) {
       localStorage.setItem("favoritos", JSON.stringify(lista));
     }
-
     function toggleFavorito(id) {
       const favs = obtenerFavoritos();
       const i = favs.indexOf(id);
@@ -187,15 +167,9 @@
 
     function ordenarProductos(lista) {
       const copia = lista.slice();
-      if (ordenActual === "precio-asc") {
-        copia.sort((a, b) => (a.Precio || 0) - (b.Precio || 0));
-      } else if (ordenActual === "precio-desc") {
-        copia.sort((a, b) => (b.Precio || 0) - (a.Precio || 0));
-      } else if (ordenActual === "stock-desc") {
-        copia.sort((a, b) => (b.stock || 0) - (a.stock || 0));
-      } else {
-        copia.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-      }
+      if (ordenActual === "precio-asc") copia.sort((a, b) => (a.Precio || 0) - (b.Precio || 0));
+      else if (ordenActual === "precio-desc") copia.sort((a, b) => (b.Precio || 0) - (a.Precio || 0));
+      else if (ordenActual === "stock-desc") copia.sort((a, b) => (b.stock || 0) - (a.stock || 0));
       return copia;
     }
 
@@ -225,21 +199,20 @@
           <div class="producto-info">
             <span class="categoria-tag">${p.categoria || "General"}</span>
             ${badge}
-            <button class="${favoritoActivo}" data-id="${p.id}">Favorito</button>
+            <button class="${favoritoActivo}" data-id="${p.id}">Favorito ⭐</button>
             <h3>${nombre}</h3>
-            <div class="precio-container">
-              <span class="precio">$${parseFloat(p.Precio || 0).toFixed(2)}</span>
-            </div>
+            <div class="precio-container"><span class="precio">$${parseFloat(p.Precio || 0).toFixed(2)}</span></div>
             <p class="stock">Stock disponible: ${stock}</p>
             ${
               stock > 0
-                ? `<button onclick="agregarAlCarrito('${p.id}', '${nombreEscapado}', ${p.Precio || 0}, '${p.imagen}', ${stock})">Anadir al carrito</button>`
+                ? `<button onclick="agregarAlCarrito('${p.id}', '${nombreEscapado}', ${p.Precio || 0}, '${p.imagen}', ${stock})">Anadir al carrito 🧺</button>`
                 : `<button disabled>Agotado</button>`
             }
           </div>
         `;
 
-        card.addEventListener("click", () => abrirModal(p));
+        const img = card.querySelector(".producto-img");
+        if (img) img.addEventListener("click", () => abrirModal(p));
 
         const btnCarrito = card.querySelector("button");
         if (btnCarrito) btnCarrito.addEventListener("click", (e) => e.stopPropagation());
@@ -258,20 +231,10 @@
 
     function aplicarFiltro() {
       let filtrados = todosLosProductos;
-
-      if (categoriaActual !== "todos") {
-        filtrados = filtrados.filter((p) => p.categoria === categoriaActual);
-      }
-
-      if (textoBusqueda) {
-        filtrados = filtrados.filter((p) =>
-          (p.Nombre || "").toLowerCase().includes(textoBusqueda)
-        );
-      }
-
+      if (categoriaActual !== "todos") filtrados = filtrados.filter((p) => p.categoria === categoriaActual);
+      if (textoBusqueda) filtrados = filtrados.filter((p) => (p.Nombre || "").toLowerCase().includes(textoBusqueda));
       filtrados = filtrados.filter((p) => (p.Precio || 0) <= precioMax);
       filtrados = ordenarProductos(filtrados);
-
       mostrarProductos(filtrados);
     }
 
@@ -312,7 +275,6 @@
         contenedor.innerHTML = '<p class="loading">Error al cargar productos</p>';
       });
     }
-
     cargarProductos();
   </script>
 

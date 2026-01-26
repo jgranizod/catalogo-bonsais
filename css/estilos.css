@@ -809,177 +809,87 @@ footer {
   .grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
 }
 
+/* ====== FIX REAL (TU PROYECTO) ====== */
 
-/* ====== FIX LEGIBILIDAD (PEGAR AL FINAL) ====== */
-
-/* 1) NAV: quita el cuadro claro y fuerza contraste */
-body.dark nav a,
-body.dark .nav a{
-  color: #E6F2EA !important;
-  background: transparent !important;
+/* NAV: arregla el "cuadro claro" del activo en modo oscuro */
+.modo-oscuro .nav a{
+  color: var(--text);
+  background: transparent;
+}
+.modo-oscuro .nav a:hover{
+  background: var(--surface-2);
+}
+.modo-oscuro .nav a.activo{
+  background: #2A3A30;         /* activo oscuro */
+  color: var(--text);
+  border: 1px solid #3B5244;
 }
 
-body.dark nav a:hover,
-body.dark .nav a:hover{
-  background: #1C2B22 !important;
-}
-
-body.dark nav a.active,
-body.dark .nav a.active,
-body.dark nav a[aria-current="page"]{
-  background: #2A3A30 !important;  /* activo oscuro */
-  color: #E6F2EA !important;
-  border: 1px solid #3B5244 !important;
-}
-
-/* 2) PRODUCTOS: fuerza texto claro dentro de cards (tu problema principal) */
-body.dark .producto,
-body.dark .card,
-body.dark .producto-card{
-  background: #16241C !important;
-  border: 1px solid #2A3A30 !important;
-  color: #E6F2EA !important;
-}
-
-body.dark .producto *,
-body.dark .card *,
-body.dark .producto-card *{
-  color: inherit !important;
-  opacity: 1 !important;           /* por si algún texto está en 0.3/0.5 */
-  filter: none !important;          /* por si aplicaste brightness/contrast */
-}
-
-body.dark .producto .precio,
-body.dark .card .precio{
-  color: #4CAF50 !important;
-  font-weight: 700 !important;
-}
-
-body.dark .producto .stock,
-body.dark .card .stock{
-  color: #B7D1C2 !important;
-}
-
-/* 3) MODAL: en oscuro que no quede blanco “inmutable” y que el texto se lea */
-body.dark .modal{
-  background: rgba(0,0,0,.65) !important;
-}
-
-body.dark .modal-contenido,
-body.dark .modal-content{
-  background: #16241C !important;
-  color: #E6F2EA !important;
-  border: 1px solid #2A3A30 !important;
-}
-
-body.dark .modal-contenido *,
-body.dark .modal-content *{
-  color: inherit !important;
-}
-
-
-
-/* ====== CARRITO: estilo limpio (CLARO + OSCURO) ====== */
-
-/* Panel */
-#carritoPanel, .carrito-panel, .carrito {
+/* PRODUCTOS: asegura legibilidad en modo oscuro */
+.modo-oscuro .producto{
   background: var(--surface);
-  color: var(--text);
-  border-left: 1px solid var(--border);
+  border-color: var(--border);
 }
+.modo-oscuro .producto h3{ color: var(--text); }
+.modo-oscuro .stock{ color: var(--text-3); }
 
-/* Header carrito */
-#carritoPanel h2, .carrito-panel h2, .carrito h2{
-  color: var(--text);
+/* MODAL: que en modo oscuro sí cambie */
+.modo-oscuro .modal{
+  background: var(--surface);
+  border-color: var(--border);
 }
-
-/* Items */
-#carritoPanel .item, .carrito-item{
-  display: grid;
-  grid-template-columns: 56px 1fr auto;
-  gap: 12px;
-  padding: 12px 14px;
-  border-bottom: 1px solid var(--border);
-  align-items: center;
-  background: transparent;
+.modo-oscuro .modal-body{
+  background: var(--surface);
 }
-
-#carritoPanel img, .carrito-item img{
-  width: 52px;
-  height: 52px;
-  border-radius: 10px;
-  object-fit: cover;
-}
-
-/* Textos */
-#carritoPanel .nombre, .carrito-item .nombre{
-  color: var(--text);
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-#carritoPanel .precio, .carrito-item .precio{
-  color: var(--accent);
-  font-weight: 700;
-}
-
-/* Botón X (eliminar) */
-#carritoPanel .eliminar, .carrito-item .eliminar, #carritoPanel .remove{
-  color: var(--muted);
-  background: transparent;
-  border: 0;
-  font-size: 18px;
-  cursor: pointer;
-}
-#carritoPanel .eliminar:hover, .carrito-item .eliminar:hover, #carritoPanel .remove:hover{
-  color: var(--text);
-}
-
-/* Controles + / - */
-#carritoPanel .qty, .carrito-item .qty{
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-#carritoPanel .qty button, .carrito-item .qty button{
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
+.modo-oscuro .modal-info h3{ color: var(--text); }
+.modo-oscuro .modal-descripcion{ color: var(--text-2); }
+.modo-oscuro .modal-close{
   background: var(--surface-2);
   color: var(--text);
 }
 
-#carritoPanel .qty span, .carrito-item .qty span{
-  min-width: 18px;
-  text-align: center;
+/* CARRITO: tu sidebar real */
+.modo-oscuro #carrito-sidebar{
+  background: var(--surface);
+  border-left: 1px solid var(--border);
   color: var(--text);
 }
-
-/* Totales */
-#carritoPanel .resumen, .carrito-resumen{
-  padding: 14px;
+.modo-oscuro .carrito-header{
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+.modo-oscuro .carrito-close{
   color: var(--text-2);
+}
+.modo-oscuro .carrito-close:hover{
+  color: var(--text);
+}
+.modo-oscuro .carrito-item-info h4{
+  color: var(--text);
+}
+.modo-oscuro .carrito-item-precio{
+  color: var(--accent);
+}
+.modo-oscuro .btn-cantidad{
+  background: var(--surface-2);
+  color: var(--text);
+  border-color: var(--border);
+}
+.modo-oscuro .btn-cantidad:hover{
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+.modo-oscuro #carrito-footer{
+  background: var(--surface-2);
   border-top: 1px solid var(--border);
 }
 
-#carritoPanel .resumen strong, .carrito-resumen strong{
+/* Importante: el botón eliminar "X" que estaba invisible */
+.btn-eliminar{
+  color: var(--text-2);
+}
+.btn-eliminar:hover{
   color: var(--text);
-}
-
-/* Botones del carrito */
-#carritoPanel .acciones button, .carrito-acciones button{
-  width: 100%;
-  margin-top: 10px;
-  background: var(--accent);
-  color: var(--bg);
-  border: 0;
-  border-radius: 10px;
-  padding: 12px;
-  font-weight: 700;
-}
-
-#carritoPanel .acciones button:hover, .carrito-acciones button:hover{
-  background: var(--accent-2);
+  opacity: 1;
 }

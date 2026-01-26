@@ -3,7 +3,7 @@ import { doc, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/f
 
 const WHATSAPP_NUMERO = "593985700805";
 let colaOperaciones = Promise.resolve();
-let carritoCache = null;
+let carritoCache = [];
 const bloqueados = new Set();
 const COOLDOWN_MS = 3000;
 const ultimoClick = new Map();

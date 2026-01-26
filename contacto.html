@@ -8,7 +8,6 @@
 </head>
 <body>
 
-  <!-- NAVEGACION -->
   <header class="header">
     <div class="container">
       <div class="logo">Servigreen</div>
@@ -18,52 +17,13 @@
         <a href="contacto.html" class="activo">Contacto</a>
       </nav>
       <div class="header-actions">
-        <button id="theme-toggle" class="btn-secundario">Modo oscuro</button>
+        <button id="theme-toggle" class="btn-secundario">Modo oscuro 🌙</button>
         <button class="carrito-btn" onclick="toggleCarrito()">
-          Carrito <span id="carrito-count" class="carrito-count">0</span>
+          Carrito 🛒 <span id="carrito-count" class="carrito-count">0</span>
         </button>
       </div>
     </div>
   </header>
-
-  <!-- CARRITO SIDEBAR -->
-  <div id="carrito-overlay"></div>
-  <div id="carrito-sidebar">
-    <div class="carrito-header">
-      <h2>Tu Carrito</h2>
-      <button class="carrito-close" onclick="toggleCarrito()">&times;</button>
-    </div>
-
-    <div id="carrito-items"></div>
-
-    <div id="carrito-footer" style="display: none;">
-      <div class="carrito-resumen">
-        <div class="carrito-resumen-linea">
-          <span>Subtotal</span>
-          <span id="carrito-subtotal">$0.00</span>
-        </div>
-        <div class="carrito-resumen-linea">
-          <span>Envio</span>
-          <span id="carrito-envio">$0.00</span>
-        </div>
-        <div class="carrito-resumen-linea">
-          <span>Impuestos</span>
-          <span id="carrito-impuestos">$0.00</span>
-        </div>
-      </div>
-
-      <div class="carrito-total-container">
-        <span class="carrito-total-label">Total:</span>
-        <span id="carrito-total">$0.00</span>
-      </div>
-
-      <div class="carrito-acciones">
-        <button onclick="toggleCarrito()" class="btn-seguir-comprando">Continuar comprando</button>
-        <button onclick="vaciarCarrito()" class="btn-vaciar">Vaciar Carrito</button>
-        <button onclick="checkoutWhatsApp()" class="btn-checkout">Realizar Pedido por WhatsApp</button>
-      </div>
-    </div>
-  </div>
 
   <div class="container">
     <h1 class="titulo-seccion">Contacto</h1>
@@ -71,31 +31,27 @@
     <div class="contacto-contenido">
       <div class="contacto-info">
         <div class="info-card">
-          <div class="info-icon">Ubicacion</div>
+          <div class="info-icon">📍</div>
           <h3>Ubicacion</h3>
           <p>Milagro, Guayas<br>Ecuador</p>
         </div>
-
         <div class="info-card">
-          <div class="info-icon">Telefono</div>
+          <div class="info-icon">📱</div>
           <h3>Telefono</h3>
           <p><a href="tel:+593985700805">+593 98 570 0805</a></p>
         </div>
-
         <div class="info-card">
-          <div class="info-icon">Email</div>
+          <div class="info-icon">📧</div>
           <h3>Email</h3>
           <p><a href="mailto:contacto@servigreen.com">contacto@servigreen.com</a></p>
         </div>
-
         <div class="info-card">
-          <div class="info-icon">Horario</div>
+          <div class="info-icon">⏰</div>
           <h3>Horarios</h3>
           <p>Lunes a Sabado<br>9:00 AM - 6:00 PM</p>
         </div>
-
         <div class="info-card">
-          <div class="info-icon">WhatsApp</div>
+          <div class="info-icon">💬</div>
           <h3>WhatsApp</h3>
           <p><a href="https://wa.me/593985700805" target="_blank">Chatea con nosotros</a></p>
         </div>
@@ -103,31 +59,24 @@
 
       <div class="contacto-formulario">
         <h2>Envianos un mensaje</h2>
-        <p class="form-descripcion">
-          Tienes alguna pregunta? Completa el formulario y te responderemos pronto.
-        </p>
-
+        <p class="form-descripcion">Tienes alguna pregunta? Completa el formulario y te responderemos pronto.</p>
         <form onsubmit="enviarMensaje(event)">
           <div class="form-group">
             <label>Nombre completo</label>
             <input type="text" required placeholder="Tu nombre">
           </div>
-
           <div class="form-group">
             <label>Email</label>
             <input type="email" required placeholder="tu@email.com">
           </div>
-
           <div class="form-group">
             <label>Telefono (opcional)</label>
             <input type="tel" placeholder="+593 98 570 0805">
           </div>
-
           <div class="form-group">
             <label>Mensaje</label>
             <textarea rows="6" required placeholder="En que podemos ayudarte?"></textarea>
           </div>
-
           <button type="submit" class="btn-enviar">Enviar Mensaje</button>
         </form>
       </div>

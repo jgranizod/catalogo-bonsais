@@ -211,21 +211,7 @@ if (btnModalAgregar) {
 }
 
 
-    function obtenerFavoritos() {
-      const data = localStorage.getItem("favoritos");
-      return data ? JSON.parse(data) : [];
-    }
-    function guardarFavoritos(lista) {
-      localStorage.setItem("favoritos", JSON.stringify(lista));
-    }
-    function toggleFavorito(id) {
-      const favs = obtenerFavoritos();
-      const i = favs.indexOf(id);
-      if (i >= 0) favs.splice(i, 1);
-      else favs.push(id);
-      guardarFavoritos(favs);
-      aplicarFiltro();
-    }
+  
 
     function ordenarProductos(lista) {
       const copia = lista.slice();
@@ -358,6 +344,7 @@ function mostrarProductos(productos) {
   <script src="js/ui.js"></script>
 </body>
 </html>
+
 
 
 

@@ -205,23 +205,28 @@
         const nombreEscapado = nombre.replace(/'/g, "\\'");
         const favoritoActivo = favoritos.includes(p.id) ? "favorito activo" : "favorito";
 
-        card.innerHTML = `
-          <img src="${p.imagen}" alt="${nombre}" class="producto-img" loading="lazy"
-               onerror="this.src='https://via.placeholder.com/280?text=Sin+Imagen'">
-          <div class="producto-info">
-            <span class="categoria-tag">${p.categoria || "General"}</span>
-            ${badge}
-            <button class="${favoritoActivo}" data-id="${p.id}">Favorito ⭐</button>
-            <h3>${nombre}</h3>
-            <div class="precio-container"><span class="precio">$${parseFloat(p.Precio || 0).toFixed(2)}</span></div>
-            <p class="stock">Stock disponible: ${stock}</p>
-            ${
-              stock > 0
-                ? `<button onclick="agregarAlCarrito('${p.id}', '${nombreEscapado}', ${p.Precio || 0}, '${p.imagen}', ${stock})">Anadir al carrito 🧺</button>`
-                : `<button disabled>Agotado</button>`
-            }
-          </div>
-        `;
+  const favoritoActivo = favoritos.includes(p.id) ? "favorito activo" : "favorito";
+
+card.innerHTML = `
+  <img src="${p.imagen}" alt="${nombre}" class="producto-img" loading="lazy"
+       onerror="this.src='https://via.placeholder.com/280?text=Sin+Imagen'">
+  <div class="producto-info">
+    <span class="categoria-tag">${p.categoria || "General"}</span>
+    ${badge}
+    <button class="${favoritoActivo}" data-id="${p.id}" aria-label="Favorito">
+      ${favoritos.includes(p.id) ? "★" : "☆"}
+    </button>
+    <h3>${nombre}</h3>
+    <div class="precio-container"><span class="precio">$${parseFloat(p.Precio || 0).toFixed(2)}</span></div>
+    <p class="stock">Stock disponible: ${stock}</p>
+    ${
+      stock > 0
+        ? `<button class="btn-carrito" onclick="agregarAlCarrito('${p.id}', '${nombreEscapado}', ${p.Precio || 0}, '${p.imagen}', ${stock})">Anadir al carrito 🧺</button>`
+        : `<button disabled>Agotado</button>`
+    }
+  </div>
+`;
+
 
         const img = card.querySelector(".producto-img");
         if (img) img.addEventListener("click", () => abrirModal(p));
@@ -294,6 +299,7 @@
   <script src="js/ui.js"></script>
 </body>
 </html>
+
 
 
 

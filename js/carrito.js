@@ -72,7 +72,6 @@ async function ajustarStock(id, delta) {
     return false;
   }
 }
-
 window.agregarAlCarrito = function(id, nombre, precio, imagen, stock) {
   return enCola(async () => {
     if (enCooldown(id)) {
@@ -83,16 +82,22 @@ window.agregarAlCarrito = function(id, nombre, precio, imagen, stock) {
     bloqueados.add(id);
 
     try {
-      const ok = await ajustarStock(id, -1);
-      if (!ok) return;
+      if (stock <= 0) {
+        mostrarNotificacion("No hay stock disponible");
+        return;
+      }
 
       const carrito = obtenerCarrito();
       const productoExistente = carrito.find((item) => item.id === id);
 
       if (productoExistente) {
+        if (productoExistente.cantidad >= stock) {
+          mostrarNotificacion("No hay más stock disponible");
+          return;
+        }
         productoExistente.cantidad++;
       } else {
-        carrito.push({ id, nombre, precio: parseFloat(precio), imagen, cantidad: 1 });
+        carrito.push({ id, nombre, precio: parseFloat(precio), imagen, cantidad: 1, stock });
       }
 
       guardarCarrito(carrito);
@@ -106,6 +111,7 @@ window.agregarAlCarrito = function(id, nombre, precio, imagen, stock) {
   });
 };
 
+
 window.aumentarCantidad = function(id) {
   return enCola(async () => {
     if (enCooldown(id)) {
@@ -116,12 +122,14 @@ window.aumentarCantidad = function(id) {
     bloqueados.add(id);
 
     try {
-      const ok = await ajustarStock(id, -1);
-      if (!ok) return;
-
       const carrito = obtenerCarrito();
       const producto = carrito.find((item) => item.id === id);
       if (!producto) return;
+
+      if (producto.cantidad >= producto.stock) {
+        mostrarNotificacion("No hay más stock disponible");
+        return;
+      }
 
       producto.cantidad++;
       guardarCarrito(carrito);
@@ -132,15 +140,13 @@ window.aumentarCantidad = function(id) {
   });
 };
 
+
 window.disminuirCantidad = function(id) {
   return enCola(async () => {
     if (bloqueados.has(id)) return;
     bloqueados.add(id);
 
     try {
-      const ok = await ajustarStock(id, 1);
-      if (!ok) return;
-
       let carrito = obtenerCarrito();
       const producto = carrito.find((item) => item.id === id);
       if (!producto) return;
@@ -166,12 +172,6 @@ window.eliminarDelCarrito = function(id) {
 
     try {
       const carrito = obtenerCarrito();
-      const producto = carrito.find((item) => item.id === id);
-      if (!producto) return;
-
-      const ok = await ajustarStock(id, producto.cantidad);
-      if (!ok) return;
-
       const nuevo = carrito.filter((item) => item.id !== id);
       guardarCarrito(nuevo);
       renderizarCarrito();
@@ -181,6 +181,7 @@ window.eliminarDelCarrito = function(id) {
     }
   });
 };
+
 
 async function limpiarCarrito() {
   carritoCache = [];
@@ -297,6 +298,14 @@ window.checkoutWhatsApp = function() {
       alert("El carrito esta vacio");
       return;
     }
+    for (const item of carrito) {
+  const ok = await ajustarStock(item.id, -item.cantidad);
+  if (!ok) {
+    alert("No hay stock suficiente para completar el pedido.");
+    return;
+  }
+}
+
 
     let mensaje = "*NUEVO PEDIDO - SERVIGREEN*\\n\\n";
     mensaje += "*PRODUCTOS:*\\n";
